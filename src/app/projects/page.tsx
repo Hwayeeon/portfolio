@@ -26,8 +26,8 @@ const projects: Project[] = [
     description:
       "A modern, fast, and SEO-optimized portfolio built with Next.js 15, featuring MDX blog posts, dark mode, and excellent performance scores.",
     tech: ["Next.js 15", "React 19", "TypeScript", "TailwindCSS", "MDX", "Shiki"],
-    github: "https://github.com/your-username/portfolio",
-    demo: "https://your-portfolio.vercel.app",
+    github: "https://github.com/Hwayeeon/portfolio",
+    demo: "https://www.davidsonrafael.me/",
     featured: true,
   },
   {
@@ -35,8 +35,8 @@ const projects: Project[] = [
     description:
       "A full-stack task management application with real-time updates, drag-and-drop functionality, and team collaboration features.",
     tech: ["React", "Node.js", "PostgreSQL", "Socket.io", "Prisma", "TailwindCSS"],
-    github: "https://github.com/your-username/task-app",
-    demo: "https://task-app-demo.vercel.app",
+    github: "https://github.com/Hwayeeon/",
+    demo: "https://www.davidsonrafael.me/",
     featured: true,
   },
   {
@@ -44,15 +44,15 @@ const projects: Project[] = [
     description:
       "A beautiful weather application with location-based forecasts, interactive charts, and responsive design.",
     tech: ["Vue.js", "Chart.js", "OpenWeather API", "SCSS"],
-    github: "https://github.com/your-username/weather-dashboard",
-    demo: "https://weather-dashboard-demo.netlify.app",
+    github: "https://github.com/Hwayeeon/",
+    demo: "https://www.davidsonrafael.me/",
   },
   {
     title: "E-commerce Platform",
     description:
       "A modern e-commerce solution with payment integration, admin dashboard, and inventory management.",
     tech: ["Next.js", "Stripe", "Supabase", "TailwindCSS", "Zustand"],
-    github: "https://github.com/your-username/ecommerce",
+    github: "https://github.com/Hwayeeon/",
     featured: true,
   },
 ];
