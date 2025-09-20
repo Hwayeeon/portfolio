@@ -1,0 +1,97 @@
+---
+title: "Perancangan Basis Data"
+publishedAt: "2025-09-20"
+summary: "Catetan kuliah Perancangan Basis Data"
+---
+
+## Sejarah Database
+
+- 1960: Komputer menjadi biaya yang hemat bagi perusahaan swasta, dan kapasitas penyimpanan meningkat.
+- 1970 - 1972: **E.F. Codd** merumuskan **relational model** untuk basis data, memisahkan logika organisasi dari storage fisik.
+- 1976: **P. Chen** merumuskan **entity relationship model (ERM)** untuk desain database.
+- Awal 1980: Sistem database relasional pertama tersedia secara komersial, mulai muncul dengan Oracle Versi 2.
+- Pertengahan 1980: SQL (Structured Query Language) menjadi standar internasional.
+- Awal 1990: Perombakan industri dimulai, semakin sedikit perusahaan bertahan. Oracle tetap bertahan.
+- Pertengahan 1990: WWW muncul, perlombaan untuk akses jarak jauh ke sistem komputer dengan data lama.
+- Akhir 1990: Investasi besar di perusahaan internet membangun tools-market untuk Web/Internet/DB Connector.
+- Awal 2000: Pertumbuhan aplikasi database solid terus berlanjut.
+
+## Data Modeling itu apa hubungannya dengan Database?
+
+1. **Conceptual Data Modelling (Analyze):** ERD, relational & entity.
+2. **Database Design (Design):** Mengubah ERD ke struktur tabel, kolom, constraint.
+3. **Database Building (Build):** Implementasi di DBMS.
+
+**Intinya:**
+
+- Tanpa data modelling → database berantakan, susah dicari, gampang error.
+- Dengan data modelling → database terstruktur, efisien, mudah di-maintain dan dipakai aplikasi.
+
+## Metode Pengumpulan Data
+
+- **Non-invasive:** Cara mengumpulkan atau menggunakan data tanpa mengganggu, merusak, atau menyentuh langsung sistem atau orangnya.
+- **Invasive:** Mengumpulkan data dengan cara menyentuh langsung sumber (contoh: operasi medis, debug di production).
+
+## Implementasi Free Models
+
+Sebuah **model data konseptual** yang baik akan tetap sama, apapun jenis basis data tempat sistem dibangun atau diimplementasikan. Model akan tetap sama bahkan jika database tidak digunakan sama sekali.
+
+**Penting:**
+
+- Model ≠ database.
+- Model adalah _blueprint_ logika.
+- Database hanyalah alat untuk implementasi model.
+
+### Tujuan Implementasi Free Models
+
+- Memisahkan **logika data** dari cara penyimpanan fisiknya.
+- Memudahkan komunikasi antara developer, analis, dan stakeholder tanpa tergantung DBMS tertentu.
+- Memastikan model **stabil dan fleksibel** meski teknologi database berubah.
+
+## Apa itu ERD?
+
+- ERD (Entity-Relationship Diagram) adalah daftar semua **entitas** dan **atribut** serta hubungan antar entitas yang penting.
+- Memberikan informasi latar belakang seperti **deskripsi entitas, tipe data, dan constraint**.
+- Diagram **opsional**, tapi sangat berguna sebagai alat komunikasi visual.
+
+### Tujuan dari ER Modeling
+
+- Mendapatkan semua data yang dibutuhkan.
+- Memastikan data tidak dobel.
+- Tidak menyimpan data yang bisa diturunkan dari data lain.
+- Menempatkan data di lokasi yang logis dan mudah diprediksi.
+
+### Atribut
+
+- **Volatile:** Sering berubah (misal: status pesanan)
+- **Non-volatile:** Jarang berubah (misal: tanggal lahir)
+
+### Level Data Modelling
+
+1. **Conceptual Model:** Fokus pada apa data yang dibutuhkan dan hubungannya.
+2. **Logical Model:** Mengubah model konseptual jadi tabel, kolom, dan constraint logis.
+3. **Physical Model:** Implementasi di DBMS tertentu, termasuk indeks, tipe data fisik, dan optimisasi.
+
+## Terminology
+
+- **Entity Relationship Diagram (ERD):** Diagram visual untuk entitas dan hubungannya.
+- **Implementation Free:** Model yang tidak tergantung DBMS tertentu.
+- **Entity:** Objek nyata atau konsep yang datanya disimpan.
+- **Attribute:** Properti atau karakteristik dari entity.
+- **Relationship:** Hubungan antar entity.
+- **Primary Key (PK):** Identitas unik tiap record di tabel.
+- **Foreign Key (FK):** Link ke record di tabel lain.
+- **Null:** Nilai kosong / belum ada data.
+- **Unique:** Nilai harus berbeda di tiap record.
+- **Constraint:** Aturan pada tabel atau kolom (misal: PK, FK, Unique, Check).
+- **Volatile Attribute:** Atribut yang sering berubah.
+- **Non-volatile Attribute:** Atribut yang jarang berubah.
+- **Schema:** Struktur tabel, kolom, dan constraint dalam database.
+- **Table Instance:** Baris/buah data aktual di tabel.
+- **Index:** Struktur tambahan untuk mempercepat pencarian data.
+
+## Contoh Penerapan
+
+- **Conceptual:** Identifikasi entitas _User_, _Order_, dan _Product_, beserta hubungannya.
+- **Logical:** Buat tabel `Users`, `Orders`, `Products` dengan primary key, foreign key, tipe data.
+- **Physical:** Implementasi di MySQL/PostgreSQL, tambahkan index, optimisasi query, dan constraints nyata.
