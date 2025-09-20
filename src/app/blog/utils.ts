@@ -7,6 +7,10 @@ export interface BlogMetadata {
   publishedAt: string;
   summary: string;
   image?: string;
+  categories?: string[];
+  tags?: string[];
+  thumbnailUrl?: string | undefined;
+  images?: string[];
 }
 
 export interface BlogPost {
@@ -43,7 +47,25 @@ function parseFrontMatter(fileContent: string): ParsedMDX | null {
 
     let value = valueArr.join(": ").trim();
     value = value.replace(/^['"](.*)['"]$/, "$1");
-    metadata[key.trim() as keyof BlogMetadata] = value;
+
+    const trimmedKey = key.trim() as keyof BlogMetadata;
+
+    // Handle arrays for categories, tags, and images
+    if (trimmedKey === "categories" || trimmedKey === "tags" || trimmedKey === "images") {
+      // Parse YAML array format: [item1, item2] or - item format
+      if (value.startsWith("[") && value.endsWith("]")) {
+        const arrayValue = value
+          .slice(1, -1)
+          .split(",")
+          .map((item) => item.trim().replace(/^['"](.*)['"]$/, "$1"));
+        (metadata as Record<string, unknown>)[trimmedKey] = arrayValue;
+      } else {
+        // Single item, convert to array
+        (metadata as Record<string, unknown>)[trimmedKey] = [value];
+      }
+    } else {
+      (metadata as Record<string, unknown>)[trimmedKey] = value;
+    }
   });
 
   return { metadata: metadata as BlogMetadata, content };

@@ -21,6 +21,8 @@ interface CustomLinkProps extends React.ComponentProps<"a"> {
 
 interface RoundedImageProps extends React.ComponentProps<typeof Image> {
   alt: string;
+  caption?: string;
+  priority?: boolean;
 }
 
 interface ChildrenProps {
@@ -128,20 +130,71 @@ function CustomLink({ href, children, ...props }: CustomLinkProps) {
   );
 }
 
-function RoundedImage({ alt, ...props }: RoundedImageProps) {
+interface FigureProps {
+  src: string;
+  alt: string;
+  caption?: string;
+  priority?: boolean;
+  width?: number;
+  height?: number;
+  className?: string;
+}
+
+function Figure({
+  src,
+  alt,
+  caption,
+  priority = false,
+  width = 800,
+  height = 450,
+  className,
+}: FigureProps) {
   return (
-    <div className="mb-6">
-      <Image
-        alt={alt}
-        className="mx-auto h-auto max-w-full rounded-lg object-cover shadow-md transition-transform duration-300 hover:scale-[1.02] hover:shadow-lg"
-        {...props}
-      />
-      {alt && (
-        <p className="mt-2 text-center text-sm leading-relaxed text-gray-500 italic dark:text-gray-400">
-          {alt}
-        </p>
+    <figure className={`mb-8 overflow-hidden ${className || ""}`}>
+      <div className="bg-muted relative overflow-hidden rounded-lg shadow-md">
+        <Image
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          className="h-auto w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
+          priority={priority}
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDMyMCAxODAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2YzZjRmNiIvPjwvc3ZnPg=="
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 70vw"
+        />
+      </div>
+      {(caption || alt) && (
+        <figcaption className="text-muted-foreground mt-3 text-center text-sm leading-relaxed italic">
+          {caption || alt}
+        </figcaption>
       )}
-    </div>
+    </figure>
+  );
+}
+
+function RoundedImage({ alt, caption, priority = false, ...props }: RoundedImageProps) {
+  const imageAlt = alt || "Content image";
+
+  return (
+    <figure className="mb-8 overflow-hidden">
+      <div className="bg-muted relative overflow-hidden rounded-lg shadow-md">
+        <Image
+          alt={imageAlt}
+          className="h-auto w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
+          priority={priority}
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDMyMCAxODAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2YzZjRmNiIvPjwvc3ZnPg=="
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 70vw"
+          {...props}
+        />
+      </div>
+      {(caption || alt) && (
+        <figcaption className="text-muted-foreground mt-3 text-center text-sm leading-relaxed italic">
+          {caption || alt}
+        </figcaption>
+      )}
+    </figure>
   );
 }
 
@@ -266,6 +319,7 @@ const components = {
   blockquote: StyledBlockquote,
   Image: RoundedImage,
   img: RoundedImage,
+  Figure,
   a: CustomLink,
   code: Code,
   pre: Pre,

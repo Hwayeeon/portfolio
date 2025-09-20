@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { BlogPosts } from "@/components/posts";
+import { LatestPosts } from "@/components/latest-posts";
 
 export default function HomePage() {
   return (
@@ -46,7 +46,7 @@ export default function HomePage() {
             View all posts →
           </Link>
         </div>
-        <BlogPosts />
+        <LatestPosts limit={3} />
       </section>
     </div>
   );
