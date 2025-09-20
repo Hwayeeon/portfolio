@@ -34,7 +34,7 @@ export function LatestPosts({ limit = 3 }: { limit?: number }) {
   }
 
   return (
-    <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       {enhancedBlogs.map((post, index) => (
         <PostCard
           key={post.slug}

@@ -141,7 +141,7 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (e: Error | unknown) {
-    const message = e instanceof Error ? e.message : 'Unknown error';
+    const message = e instanceof Error ? e.message : "Unknown error";
     console.log(`Failed to generate image: ${message}`);
     return new Response(`Failed to generate the image`, {
       status: 500,

@@ -8,7 +8,7 @@ interface SEOProps {
 
 export function generatePostMetadata({
   post,
-  baseUrl = "https://yoursite.com",
+  baseUrl = "https://www.davidsonrafael.me/",
 }: SEOProps): Metadata {
   const thumbnail = resolveThumbnail(post);
   const url = `${baseUrl}/blog/${post.slug}`;
@@ -19,7 +19,7 @@ export function generatePostMetadata({
   return {
     title: post.metadata.title,
     description: post.metadata.summary,
-    authors: [{ name: "Your Name" }],
+    authors: [{ name: "Davidson Rafael" }],
     keywords: post.metadata.tags || [],
     openGraph: {
       title: post.metadata.title,
@@ -70,7 +70,7 @@ interface BlogListMetadataProps {
 
 export function generateBlogListMetadata({
   category,
-  baseUrl = "https://yoursite.com",
+  baseUrl = "https://www.davidsonrafael.me/",
 }: BlogListMetadataProps = {}): Metadata {
   const title = category && category !== "all" ? `${category} Posts - Blog` : "Blog - All Posts";
 
@@ -104,8 +104,8 @@ export function generateBlogListMetadata({
       title,
       description,
       images: [`${baseUrl}/api/og?title=${encodeURIComponent(title)}`],
-      creator: "@yourusername",
-      site: "@yourusername",
+      creator: "@davidsonrafael_",
+      site: "@davidsonrafael_",
     },
     alternates: {
       canonical: url,
