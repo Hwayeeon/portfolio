@@ -165,7 +165,7 @@ export default function ProjectsPage() {
           Check out my GitHub for more projects and contributions.
         </p>
         <Link
-          href="https://github.com/your-username"
+          href="https://github.com/Hwayeeon"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-lg px-6 py-3 font-medium transition-colors"
