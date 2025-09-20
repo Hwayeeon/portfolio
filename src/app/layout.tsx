@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     description:
       "A passionate developer showcasing projects, thoughts, and expertise in modern web development.",
   },
-  metadataBase: new URL("https://portfolio-blog-starter.vercel.app"),
+  metadataBase: new URL("https://www.davidsonrafael.me/"),
 };
 
 interface RootLayoutProps {
