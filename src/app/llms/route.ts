@@ -15,6 +15,7 @@ BLOG CONTENT
 Technical articles covering web development, programming best practices, and developer tools:
 • "Embracing Vim: The Unsung Hero of Code Editors" - Explores Vim's efficiency, customization capabilities, ubiquity across platforms, and strong community support for modern development workflows.
 • "Spaces vs. Tabs: The Indentation Debate Continues" - Examines the ongoing debate between spaces and tabs for code indentation, discussing consistency, readability, flexibility, and team dynamics in software development.
+• "Perancangan Basis Data" - Discusses database design principles, normalization, indexing, and best practices for creating efficient and scalable databases.
 
 TECHNICAL EXPERTISE
 Specialized in React ecosystem, TypeScript, Next.js, TailwindCSS, MDX content management, modern build tools, and responsive web design. Advocates for developer experience, code quality, and performance optimization.`;
