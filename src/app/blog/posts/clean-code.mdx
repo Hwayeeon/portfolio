@@ -1,25 +1,27 @@
 ---
 title: "Kenapa Clean Code Lebih Penting dari Sekadar "Kode yang Jalan""
-publishedAt: "2024-12-21"
+publishedAt: "2025-09-21"
 summary: "Kenapa clean code bukan cuma teori dosen, tapi kunci bikin software scalable, maintainable, dan ramah developer di masa depan."
 categories: ["Programming", "Best Practices", "Software Engineering", "Coding Style"]
 tags: ["clean-code", "best-practices", "beginner-friendly", "coding-style", "maintainability"]
 thumbnailUrl: "https://images.unsplash.com/photo-1590608897129-79da98d15969?w=800&h=450&q=80"
 ---
 
-Sebagai seorang mahasiswa komputer, kita sering dapat tugas yang penting cuma: asal probram jalan, nilai A beres/ Habis itu gile dikumpulin, dilupain. Padahal di dunia nyata "jalan" itu cuuma syarat minimum.
+Sebagai seorang mahasiswa komputer, kita sering dapat tugas yang penting cuma: asal program jalan, nilai A beres/ Habis itu file dikumpulin, dilupain. Padahal di dunia nyata "jalan" itu cuma syarat minimum.
 
 **Masalahnya**
 Kode yang cuma penting jalan biasanya:
+
 - Penuh magic number (angka random nongol tanpa konteks).
-- Nama variable kayak a, b, x yan gbikin otak sakit seminggu kemudian.
+- Nama variable kayak a, b, x yang bikin otak sakit seminggu kemudian.
 - Fungsi panjang 200 baris yang harus dibaca dari atas sampai bawah biar ngerti.
 
 **Clean Code itu**
+
 - Mudah dibaca - karna kodeny abukan cuma buat komputer, tapi buat manusia lain (termasuk kamu versi 3 bulan depan)
 - Mudah di-maintain - kalau ada bug, kamu nggak harus rewrite dari nol.
 - Reusable - nggak bikin kamu bikin ulang logika yang sama tiap kali bikin project baru
- 
+
 **Contoh Sederhana**
 
 ```python
@@ -35,7 +37,8 @@ def convert_to_seconds(hours, minutes, seconds):
 print(convert_to_seconds(1, 20, 30))
 ```
 
-Kode kode di atas jalan, tapi yang kedua bisa dibaca sama siapapun
+Kedua kode di atas jalan, tapi yang kedua bisa dibaca sama siapapun
 
-## Kesimpulan 
+## Kesimpulan
+
 Clean code itu investasi. Kamu habiskan 5 menit ekstra untuk bikin kode rapi, tapi kamu hemat 2 jam waktu debugging di masa depan. Jadi, daripada kamu pamer "kode gw jalan" tapi yang baca "mudah dimengerti semoga harimu suram", coba bikin kode yang bisa bikin siapa aja yang baca bisa bilang "mudah dimengerti"
