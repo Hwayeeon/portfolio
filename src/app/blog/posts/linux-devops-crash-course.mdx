@@ -1,0 +1,108 @@
+---
+title: "Linux DevOps Crash Course: Dari Shell ke Deploy"
+publishedAt: "2025-09-22"
+summary: "Fondasi DevOps di Linux secara ringkas: perintah inti, proses & service, networking, systemd, journald, SSH, firewall, container, dan CI/CD."
+categories: ["DevOps", "Linux", "Infrastructure"]
+tags: ["linux", "devops", "shell", "systemd", "docker", "ssh", "firewall", "ci-cd"]
+thumbnailUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&q=80&auto=format"
+---
+
+Kalau DevOps adalah olahraga tim, Linux itu lapangannya. Hampir semua tools DevOps lari di atas Linux. Kursus kilat ini ngerangkum hal-hal penting biar kamu nyaman pegang server: dari shell, proses, jaringan, sampai container dan CI/CD.
+
+<Figure
+  src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?w=1200&h=630&fit=crop&q=80&auto=format"
+  alt="Server rack dan infrastruktur Linux"
+  width={1200}
+  height={630}
+/>
+
+## Apa yang Akan Kamu Pelajari?
+
+- Dasar shell dan navigasi file
+- Proses, service, dan systemd
+- Manajemen paket dan logs
+- Networking (port, DNS, firewall)
+- SSH, akses aman, dan kunci
+- Container (Docker) dan gambaran CI/CD
+
+## Kenapa Linux Penting di DevOps?
+
+- Mayoritas server dan container berbasis Linux.
+- Ekosistem tools yang kaya dan standar industri.
+- Otomasi mudah (bash, systemd, cron, Ansible, dsb.).
+
+## Dasar Shell & File System
+
+- Navigasi: `pwd`, `ls -la`, `cd`, `cat`, `less`, `head`, `tail -f`
+- Manipulasi: `cp`, `mv`, `rm -rf`, `mkdir -p`, `touch`
+- Hak akses: `chmod`, `chown`, `umask`; setuid/setgid sekilas
+- Pencarian: `find /var -name "*.log" -mtime -1`, `grep -R "ERROR" /var/log`
+- Pipa dan redirect: `journalctl -u nginx | grep 500 > errors.txt`
+
+Tips: simpan alias di `~/.bashrc` (atau `~/.zshrc`) untuk perintah yang sering.
+
+## Proses, Service, dan systemd
+
+- Lihat proses: `ps aux | grep <app>`, `top`, `htop`
+- Kelola service (systemd): `systemctl status nginx`, `systemctl restart nginx`, `systemctl enable nginx`
+- Logs service: `journalctl -u nginx --since "1 hour ago"`
+- Limit resource: `ulimit`, cgroups sekilas
+
+Analogi: systemd adalah manajer operasional—dia yang start, stop, restart, dan monitor layanan.
+
+## Manajemen Paket & Logs
+
+- Debian/Ubuntu: `apt update && apt upgrade`, `apt install <pkg>`
+- RHEL/CentOS: `dnf install <pkg>`
+- Logs inti: `/var/log/syslog`, `/var/log/auth.log`, `/var/log/nginx/error.log`
+- Rotasi log: `logrotate` (cek `/etc/logrotate.d`)
+
+## Networking Dasar
+
+- Cek port: `ss -tulpen | grep LISTEN`
+- Cek DNS: `dig example.com +short`, `nslookup`
+- Cek konektivitas: `ping`, `traceroute`, `curl -v https://example.com`
+- Firewall (ufw): `ufw status`, `ufw allow 22/tcp`, `ufw allow 80,443/tcp`
+
+## SSH & Akses Aman
+
+- Buat kunci: `ssh-keygen -t ed25519` → upload ke `~/.ssh/authorized_keys`
+- Koneksi: `ssh -i ~/.ssh/id_ed25519 user@server`
+- Hardening: nonaktifkan password login (`PasswordAuthentication no`), batasi user via `AllowUsers`
+
+## Cron & Otomasi
+
+- Jadwal: `crontab -e` → `0 2 * * * /usr/local/bin/backup.sh`
+- Cek: `systemctl status cron` (Debian) atau `crond` (RHEL)
+
+## Container (Docker) Singkat
+
+- Jalankan: `docker run --rm -p 8080:80 nginx`
+- Cek: `docker ps`, `docker logs -f <container>`
+- Image: `docker pull`, `docker build -t myapp:latest .`
+- Volume & network sekilas; gunakan `.dockerignore`
+
+<Figure
+  src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80&auto=format"
+  alt="Alur container dan image"
+  width={1200}
+  height={630}
+/>
+
+## CI/CD Gambaran Cepat
+
+- Pipeline dasar: build → test → scan → deploy
+- Branch proteksi + PR mandatory
+- Secrets: simpan di pengelola rahasia (jangan pernah commit .env)
+- Strategi deploy: blue/green, canary, atau rolling update
+
+## Troubleshooting Mindset
+
+- Reproduksi masalah dulu, catat gejala
+- Cek logs & metrik (CPU, RAM, disk, network)
+- Uji hipotesis satu per satu; revert jika perlu
+- Dokumentasikan fix untuk tim (wiki/README ops)
+
+## Penutup
+
+Linux adalah fondasi DevOps. Kuasai shell, systemd, jaringan, dan container—maka pipeline CI/CD akan jauh lebih mudah dikelola. Mulai dari server kecil (VPS) untuk latihan, otomatisasi hal-hal rutin, dan bangun kebiasaan observasi yang kuat.
