@@ -1,0 +1,148 @@
+---
+title: "Memilih Framework yang Tepat untuk Project yang Tepat"
+publishedAt: "2025-09-22"
+summary: "Bukan soal yang paling hype, tapi yang paling pas. Panduan lengkap dengan tabel kelebihan/kekurangan, use case, dan contoh keputusan."
+categories: ["Architecture", "Frontend", "Backend", "Best Practices"]
+tags: ["framework", "react", "nextjs", "vue", "nuxt", "svelte", "sveltekit", "express", "nestjs", "django", "laravel"]
+thumbnailUrl: "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?w=1200&h=630&fit=crop&q=80&auto=format"
+---
+
+Framework itu seperti kendaraan. Ada yang lincah buat dalam kota, ada yang stabil buat jarak jauh, ada yang bertenaga untuk muatan berat. Tujuan kamu yang menentukan kendaraan mana yang cocok—bukan sekadar warna atau tren.
+
+Artikel ini membahas cara memilih framework secara rasional: faktor yang perlu dipertimbangkan, peta kekuatan/kelemahan framework populer, dan contoh keputusan nyata.
+
+<Figure 
+  src="https://images.unsplash.com/photo-1526948128573-703ee1aeb6fa?w=1200&h=630&fit=crop&q=80&auto=format" 
+  alt="Memilih kendaraan sesuai kebutuhan—analogi memilih framework"
+  width={1200}
+  height={630}
+/>
+
+## Apa yang Perlu Dipertimbangkan?
+
+- Domain & fitur: SPA interaktif, SSR/SSG, API heavy, real-time?
+- Waktu ke pasar: perlu cepat rilis MVP atau build jangka panjang?
+- Talenta tim: bahasa/ekosistem apa yang paling dikuasai?
+- Ekosistem & tooling: routing, state, auth, testing, i18n, ORM, caching.
+- Skalabilitas & performa: beban baca/tulis, content heavy vs data heavy.
+- Maintainability: konvensi, arsitektur, opinionated vs fleksibel.
+- Biaya operasi: hosting, serverless, edge, lisensi.
+
+## Peta Framework Populer (Frontend)
+
+<Table
+  data={{
+    headers: ["Framework", "Kelebihan", "Kekurangan", "Use Case Ideal"],
+    rows: [
+      [
+        "React",
+        "Ekosistem sangat luas, komunitas besar, fleksibel pilihan stack",
+        "Butuh banyak keputusan (routing, state, data fetching), boilerplate bisa tebal",
+        "SPA kompleks, tim ingin fleksibilitas tinggi"
+      ],
+      [
+        "Next.js",
+        "SSR/SSG/ISR built-in, routing file-based, gambar & font optimasi, dukungan Edge",
+        "Ada kurva belajar App Router, beberapa fitur opiniated",
+        "Marketing site, blog, e-commerce, dashboard dengan SEO"
+      ],
+      [
+        "Vue",
+        "Lebih sederhana untuk pemula, reactivity intuitif",
+        "Ekosistem lebih kecil dari React, variasi pattern antar proyek",
+        "SPA kecil–menengah, tim suka sintaks template"
+      ],
+      [
+        "Nuxt",
+        "SSR/SSG untuk Vue, konvensi rapi, DX bagus",
+        "Lebih opiniated, update mayor perlu adaptasi",
+        "Konten/SEO, e-commerce ringan, portal dokumentasi"
+      ],
+      [
+        "Svelte",
+        "Bundle kecil, performa tinggi, sintaks minimalis",
+        "Ekosistem lebih muda, tooling belum seluas React/Vue",
+        "Widget ringan, micro-frontend, prototyping UI"
+      ],
+      [
+        "SvelteKit",
+        "Routing + SSR/SSG terintegrasi, API endpoints built-in",
+        "Perubahan API cukup cepat, perlu ikuti rilis",
+        "Aplikasi full-stack ringan hingga menengah"
+      ]
+    ]
+  }}
+/>
+
+## Peta Framework Populer (Backend)
+
+<Table
+  data={{
+    headers: ["Framework", "Kelebihan", "Kekurangan", "Use Case Ideal"],
+    rows: [
+      [
+        "Express (Node.js)",
+        "Sederhana, fleksibel, ekosistem NPM luas",
+        "Butuh banyak keputusan (struktur, validasi, DI), mudah berantakan",
+        "API ringan, prototyping cepat, microservices"
+      ],
+      [
+        "NestJS (Node.js)",
+        "Arsitektur opinionated (MVC/DI), modular, TypeScript first",
+        "Lebih berat untuk kasus sederhana",
+        "Enterprise API, tim besar, skalabilitas & testability"
+      ],
+      [
+        "Django (Python)",
+        "Batteries-included: ORM, admin, auth, form, i18n",
+        "Bisa terasa berat untuk API sederhana",
+        "Aplikasi data-heavy, CRUD cepat, panel admin kuat"
+      ],
+      [
+        "FastAPI (Python)",
+        "Performa bagus, type hints, dokumentasi otomatis (OpenAPI)",
+        "Ekosistem plugin lebih muda dari Django",
+        "Microservices, ML serving, API performa tinggi"
+      ],
+      [
+        "Laravel (PHP)",
+        "DX bagus, ORM Eloquent, scaffolding cepat, komunitas besar",
+        "Runtime PHP di beberapa stack butuh tuning",
+        "Aplikasi web lengkap, monolith yang rapi"
+      ],
+      [
+        "Spring Boot (Java)",
+        "Stabil, kaya integrasi enterprise, observability matang",
+        "Lebih berat dan verbose untuk small apps",
+        "Enterprise scale, integrasi kompleks, compliance"
+      ]
+    ]
+  }}
+/>
+
+## Contoh Keputusan (Scenario-based)
+
+- Blog/Marketing site: Next.js/SSG + CMS (Contentful/Sanity) → cepat, SEO, biaya rendah.
+- Dashboard internal: Next.js (SSR sebagian) atau React SPA + BFF (Express/Nest) → interaksi kaya.
+- API ML/serving: FastAPI + Uvicorn/Gunicorn, optionally gRPC untuk internal.
+- Aplikasi CRUD cepat: Django/Laravel dengan scaffold + admin → time-to-market tinggi.
+- Microservices skala tim besar: NestJS/Spring Boot (modular, DI, observability).
+
+## Checklist Pemilihan Framework
+
+- Kesesuaian domain (SSR/SSG/CSR, real-time, streaming)
+- DX & produktivitas (CLI, scaffold, hot reload, devtools)
+- Ekosistem (ORM, auth, cache, queue, test)
+- Kinerja & skalabilitas (profiling, caching, horizontal scaling)
+- Observabilitas (logging, tracing, metrics)
+- Komunitas & dukungan jangka panjang
+
+## Prinsip Umum: Jangan Over-Engineer
+
+- Mulai dari yang sederhana; hindari framework berat untuk MVP kecil.
+- Pilih yang dikuasai tim; “framework terbaik” yang tim tidak kuasai = lambat.
+- Siapkan jalan migrasi: pisahkan domain (BFF/API), modul, dan boundary agar mudah ganti komponen.
+
+## Penutup
+
+Framework adalah alat, bukan tujuan. Tugas kita adalah memilih alat yang tepat untuk konteks yang tepat. Dengan mempertimbangkan domain, tim, ekosistem, dan trade-off, kamu bisa mengambil keputusan yang matang—dan menghindari refactor besar yang tidak perlu.
