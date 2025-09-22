@@ -1,0 +1,58 @@
+---
+title: "Performance Web Nyata: Bukan Cuma Skor Lighthouse"
+publishedAt: "2025-09-22"
+summary: "Fokus ke user-centric metrics (LCP, INP, CLS), strategi loading, dan pengukuran di dunia nyata—bukan hanya angka hijau."
+categories: ["Frontend", "Performance", "Web Vitals"]
+tags: ["performance", "web-vitals", "lcp", "inp", "cls", "nextjs"]
+thumbnailUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=630&fit=crop&q=80&auto=format"
+---
+
+Skor Lighthouse itu penting, tapi bukan segalanya. Yang benar-benar dirasakan pengguna adalah seberapa cepat konten utama muncul, input terasa responsif, dan layout tidak loncat-loncat.
+
+<Figure
+  src="https://images.unsplash.com/photo-1520975916090-3105956dac38?w=1200&h=630&fit=crop&q=80&auto=format"
+  alt="Grafik performa dan metrik Web Vitals"
+  width={1200}
+  height={630}
+/>
+
+## Apa itu Core Web Vitals?
+
+- LCP (Largest Contentful Paint): seberapa cepat elemen utama tampil.
+- INP (Interaction to Next Paint): seberapa responsif saat interaksi.
+- CLS (Cumulative Layout Shift): seberapa stabil layout saat loading.
+
+## Kenapa Fokus ke Web Vitals?
+
+- Berkorelasi langsung dengan kepuasan pengguna dan konversi.
+- Google gunakan sebagai sinyal SEO.
+- Lebih realistis dibandingkan skor sintetis semata.
+
+## Bagaimana Meningkatkan?
+
+- LCP: optimasi gambar (format modern, ukuran tepat, preload), server cepat (SSR/SSG, caching), kurangi render-blocking.
+- INP: hindari kerja berat di main thread, gunakan web worker, debounce event.
+- CLS: tetapkan width/height gambar, hindari injeksi konten di atas tanpa ruang.
+
+## Pengukuran Nyata (RUM)
+
+- Pakai `web-vitals` JS untuk kirim metrik ke analytics.
+- Segmentasi per device/network; fokuskan perbaikan ke mayoritas user.
+
+```ts
+import { onLCP, onINP, onCLS } from "web-vitals";
+
+onLCP(console.log);
+onINP(console.log);
+onCLS(console.log);
+```
+
+## Pola di Next.js
+
+- Gunakan SSG/ISR untuk halaman statis.
+- Lazy-load komponen berat; gunakan dynamic import.
+- Optimalkan gambar via `next/image` + remotePatterns yang aman.
+
+## Penutup
+
+Kejar performa yang dirasakan pengguna, bukan sekadar skor. Ukur di lapangan, optimasi yang berdampak, dan ulangi. Dengan fokus ini, web kamu terasa cepat di perangkat nyata, bukan hanya di lab.

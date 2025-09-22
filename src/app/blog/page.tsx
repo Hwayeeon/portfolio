@@ -8,10 +8,11 @@ import { generateBlogListMetadata } from "@/lib/seo";
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: { category?: string };
+  searchParams: Promise<{ category?: string }>;
 }): Promise<Metadata> {
+  const resolvedSearchParams = await searchParams;
   return generateBlogListMetadata({
-    category: searchParams.category,
+    category: resolvedSearchParams.category,
     baseUrl: process.env.NEXT_PUBLIC_BASE_URL || "https://localhost:3000",
   });
 }

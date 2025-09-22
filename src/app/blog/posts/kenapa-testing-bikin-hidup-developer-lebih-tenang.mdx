@@ -1,0 +1,152 @@
+---
+title: "Kenapa Testing itu Bikin Hidup Developer Lebih Tenang"
+publishedAt: "2025-09-22"
+summary: "Testing bukan bikin lambat—justru bikin tidur lebih nyenyak, bug lebih cepat ketemu, dan rilis tanpa drama."
+categories: ["Programming", "Testing", "Best Practices", "Software Engineering"]
+tags: ["testing", "unit-test", "integration-test", "e2e", "tdd", "ci-cd"]
+thumbnailUrl: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&h=450&q=80&auto=format&fit=crop"
+---
+
+Testing itu ibarat sabuk pengaman di mobil. Kamu nggak berharap tabrakan setiap hari, tapi kalau kejadian, sabuk pengaman bisa menyelamatkan kamu dari masalah besar.
+
+Di dunia software, testing melakukan hal yang sama. Dia tidak menghilangkan semua bug, tapi mencegah hal-hal kecil jadi bencana saat aplikasi rilis.
+
+## Apa itu Testing?
+
+Secara sederhana, testing adalah cara kita memastikan kode bekerja sesuai ekspektasi. Bukan buat gaya-gayaan, tapi buat membuktikan bahwa sistem berperilaku benar saat kondisi normal maupun aneh.
+
+Jenis-jenis testing yang umum:
+
+- Unit Test: ngetes fungsi kecil/komponen terisolasi. Cepat dan paling sering dijalankan.
+- Integration Test: memastikan beberapa bagian bekerja bareng dengan benar.
+- End-to-End (E2E): ngetes alur nyata dari sudut pandang pengguna.
+- Snapshot/Visual Test: memastikan UI tidak berubah tanpa sengaja.
+- Contract Test: menjamin integrasi antar service via API tetap konsisten.
+
+Bayangin kamu bikin kopi. Unit test itu kayak ngetes mesin grinder berfungsi. Integration test ngecek grinder + brewer nyambung dengan baik. E2E? Coba seduh secangkir dari awal sampai siap diminum.
+
+## Kenapa Testing Bikin Hidup Lebih Tenang?
+
+- Deteksi bug lebih awal: bug yang ketemu di laptop jauh lebih murah daripada di production.
+- Anti-regression: fitur lama tetap aman meski ada perubahan besar.
+- Dokumentasi hidup: test menjelaskan perilaku kode dengan contoh yang bisa dijalankan.
+- Desain API lebih bagus: menulis test memaksa kita bikin kode modular dan mudah di-reuse.
+- Kecepatan rilis: confidence naik, review lebih cepat, CI/CD bisa otomatis kasih lampu hijau.
+
+Think of it like alarm rumah. Kamu jarang pakai, tapi begitu ada yang janggal, dia yang pertama kasih tahu.
+
+## Bagaimana Mulainya (Tanpa Pusing)?
+
+1. Tentukan prioritas level: mulai dari unit test untuk logic yang paling riskan (format uang, perhitungan pajak, otorisasi).
+2. Pilih tool: untuk JavaScript/TypeScript, Jest atau Vitest; untuk E2E, Playwright atau Cypress.
+3. Struktur folder sederhana: simpan test di file `*.test.ts` di sebelah modul yang dites atau di `__tests__/`.
+4. Tulis test pertama pakai pola Red → Green → Refactor.
+5. Pasang di CI: jalankan test otomatis tiap push/PR biar nggak ada yang lupa.
+
+Tips kecil: jangan kejar 100% coverage. Kejar 100% ketenangan pikiran di area yang paling penting.
+
+## Contoh Praktis: Unit Test Sederhana
+
+Misal kita punya util untuk menghitung diskon. Kita mau pastikan input aneh nggak bikin hasil ngawur.
+
+```ts
+// utils/pricing.ts
+export function calcDiscountedPrice(price: number, discountPct: number) {
+  if (price < 0) throw new Error("Invalid price");
+  if (discountPct <= 0) return price;
+  if (discountPct >= 100) return 0;
+  const discounted = price * (1 - discountPct / 100);
+  return Math.round(discounted * 100) / 100; // 2 desimal
+}
+```
+
+Dan ini test-nya (contoh dengan Vitest):
+
+```ts
+// utils/pricing.test.ts
+import { describe, it, expect } from "vitest";
+import { calcDiscountedPrice } from "./pricing";
+
+describe("calcDiscountedPrice", () => {
+  it("menghitung diskon normal", () => {
+    expect(calcDiscountedPrice(100_000, 20)).toBe(80_000);
+  });
+
+  it("membulatkan ke 2 desimal", () => {
+    expect(calcDiscountedPrice(99_999, 33)).toBe(66_999.33);
+  });
+
+  it("mengembalikan harga asli jika diskon <= 0", () => {
+    expect(calcDiscountedPrice(50_000, 0)).toBe(50_000);
+  });
+
+  it("membatasi diskon maksimal 100%", () => {
+    expect(calcDiscountedPrice(50_000, 100)).toBe(0);
+  });
+
+  it("menolak harga negatif", () => {
+    expect(() => calcDiscountedPrice(-1, 10)).toThrowError(/Invalid price/);
+  });
+});
+```
+
+Inti dari test di atas:
+
+- Menguji skenario umum dan edge case.
+- Ekspektasi jelas dan mudah dibaca.
+- Kalau ada yang berubah di fungsi, test akan jadi alarm pertama.
+
+## Bagaimana Mengetes Integrasi Secara Ringan
+
+Nggak harus selalu E2E untuk cek integrasi. Kamu bisa ngetes service yang memanggil API internal dengan mock yang masuk akal, bukan berlebihan.
+
+Contoh pola sehat:
+
+- Mock boundary yang tidak kamu miliki (API eksternal, filesystem).
+- Jangan mock logic yang kamu sendiri tulis; lebih baik uji benerannya.
+- Uji happy path dan minimal 1-2 error path.
+
+### Contoh sketsa (pseudocode)
+
+```ts
+// services/user-service.ts
+export async function getUserProfile(id: string, client = fetch) {
+  const res = await client(`/api/users/${id}`);
+  if (!res.ok) throw new Error("Failed");
+  return res.json();
+}
+
+// services/user-service.test.ts
+import { describe, it, expect } from "vitest";
+import { getUserProfile } from "./user-service";
+
+describe("getUserProfile", () => {
+  it("mengembalikan data ketika sukses", async () => {
+    const mockClient = async () => ({ ok: true, json: async () => ({ id: "1", name: "Ayu" }) });
+    await expect(getUserProfile("1", mockClient as any)).resolves.toMatchObject({ name: "Ayu" });
+  });
+
+  it("melempar error ketika gagal", async () => {
+    const mockClient = async () => ({ ok: false });
+    await expect(getUserProfile("1", mockClient as any)).rejects.toThrow(/Failed/);
+  });
+});
+```
+
+Dengan dependency injection kecil di parameter `client`, kode jadi lebih testable tanpa lib mock yang berat.
+
+## Praktik Baik Agar Test Tetap Sehat
+
+- Nama test deskriptif: jelaskan perilaku, bukan langkah teknis.
+- Satu assert utama per test: biar gagal pun mudah dilacak.
+- Hindari test rapuh: jangan bergantung ke waktu/tanggal atau urutan yang tidak dijamin.
+- Jalankan cepat: unit test harus < 1 detik tiap file; kalau lambat, orang malas menjalankannya.
+- Rawat seperti kode produksi: refactor test juga kalau mulai berantakan.
+
+## Penutup
+
+Testing bukan urusan perfeksionis. Ini tentang mengurangi ketidakpastian supaya tim bisa bergerak cepat tanpa rasa was-was.
+
+Mulai dari yang kecil: pilih satu modul penting, tulis 3–5 unit test bernilai, pasang di CI. Setelah itu, tambahkan integration test di jalur bisnis utama.
+
+Dengan kebiasaan itu, kamu bakal rilis lebih percaya diri, review lebih singkat, dan—yang paling penting—tidur lebih nyenyak sebelum hari demo.

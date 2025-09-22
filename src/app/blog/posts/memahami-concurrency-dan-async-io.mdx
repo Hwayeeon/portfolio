@@ -1,0 +1,80 @@
+---
+title: "Memahami Concurrency dan Async I/O Tanpa Pusing"
+publishedAt: "2025-09-22"
+summary: "Bedah konsep concurrency vs parallelism, blocking vs non-blocking, dan kapan pakai thread, async/await, atau queue."
+categories: ["Backend", "Systems", "Programming Concepts"]
+tags: ["concurrency", "async", "parallel", "io", "performance"]
+thumbnailUrl: "https://images.unsplash.com/photo-1517433456452-f9633a875f6f?w=1200&h=630&fit=crop&q=80&auto=format"
+---
+
+Pernah nungguin request API lambat dan server jadi ikut lemot? Seringnya ini masalah I/O blocking. Concurrency dan async I/O adalah cara membuat server menangani banyak pekerjaan tanpa menambah mesin berlebihan.
+
+<Figure
+  src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=630&fit=crop&q=80&auto=format"
+  alt="Diagram event loop dan worker"
+  width={1200}
+  height={630}
+/>
+
+## Apa itu Concurrency vs Parallelism?
+
+- Concurrency: mengatur banyak tugas yang berjalan seolah-olah bersamaan.
+- Parallelism: benar-benar berjalan di saat yang sama pada banyak core.
+
+Analogi: satu kasir melayani beberapa pelanggan bergantian (concurrency) vs beberapa kasir melayani masing-masing pelanggan (parallelism).
+
+## Kenapa Penting?
+
+- Skalabilitas lebih baik: tangani ribuan koneksi dengan resource terbatas.
+- Pengalaman pengguna lebih responsif.
+- Biaya infrastruktur bisa ditekan.
+
+## Bagaimana Menerapkannya?
+
+- CPU-bound → Gunakan multi-processing / thread pool.
+- I/O-bound → Gunakan async I/O (event loop) atau non-blocking I/O.
+- Queue + worker untuk pekerjaan panjang (background jobs).
+
+## Contoh Singkat (Node.js)
+
+```js
+import express from "express";
+const app = express();
+
+app.get("/slow-api", async (req, res) => {
+  const data = await fetch("https://api.example.com/data"); // non-blocking
+  const json = await data.json();
+  res.json(json);
+});
+
+app.listen(3000);
+```
+
+## Python Asyncio (I/O-bound)
+
+```python
+import asyncio
+import aiohttp
+
+async def fetch(session, url):
+    async with session.get(url) as resp:
+        return await resp.text()
+
+async def main():
+    urls = ["https://example.com"] * 5
+    async with aiohttp.ClientSession() as session:
+        results = await asyncio.gather(*[fetch(session, u) for u in urls])
+        print(len(results))
+
+asyncio.run(main())
+```
+
+## Anti-Pattern Umum
+
+- Campur blocking I/O di jalur async (menghambat event loop).
+- Over-threading tanpa pengawasan (context switching mahal).
+- Tidak memberi timeout/retry untuk I/O eksternal.
+
+## Penutup
+
+Pahami karakter beban kerja kamu—CPU-bound atau I/O-bound—lalu pilih alat yang tepat: thread/process untuk CPU, async I/O untuk I/O. Dengan begitu, aplikasi lebih responsif, hemat resource, dan siap skala.

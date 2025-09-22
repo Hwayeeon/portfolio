@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
-import { highlight } from "sugar-high";
+import { CodeBlock } from "@/components/code-block";
 import React from "react";
 
 // TypeScript interfaces
@@ -229,17 +229,29 @@ function StyledListItem({ children }: ChildrenProps) {
 }
 
 function Code({ children, ...props }: CodeProps) {
-  const codeHTML = highlight(children);
+  // For inline code, just use simple styling
   return (
     <code
-      dangerouslySetInnerHTML={{ __html: codeHTML }}
       className="rounded border border-gray-200 bg-gray-100 px-1.5 py-0.5 font-mono text-sm break-words whitespace-pre-wrap text-gray-800 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
       {...props}
-    />
+    >
+      {children}
+    </code>
   );
 }
 
 function Pre({ children, ...props }: PreProps) {
+  // Extract the code content and language from pre > code structure
+  if (React.isValidElement(children) && children.type === "code") {
+    const codeElement = children as React.ReactElement<{ className?: string; children: string }>;
+    const className = codeElement.props.className || "";
+    const language = className.replace("language-", "") || "text";
+    const codeContent = codeElement.props.children || "";
+
+    return <CodeBlock language={language}>{codeContent}</CodeBlock>;
+  }
+
+  // Fallback for other content
   return (
     <pre
       className="mb-6 overflow-x-auto rounded-lg border border-gray-700 bg-gray-900 p-3 font-mono text-xs leading-relaxed text-gray-100 shadow-lg sm:p-4 sm:text-sm dark:border-gray-600 dark:bg-gray-800"
@@ -275,7 +287,6 @@ function createHeading(level: HeadingLevel) {
   const Heading = ({ children }: HeadingProps) => {
     const slug = slugify(children as string);
 
-    // Define mobile-first responsive font sizes and spacing for each heading level
     const headingStyles: Record<HeadingLevel, string> = {
       1: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mt-8 mb-6 leading-tight tracking-tight",
       2: "text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mt-8 mb-5 leading-tight tracking-tight",
@@ -287,16 +298,16 @@ function createHeading(level: HeadingLevel) {
 
     return React.createElement(
       `h${level}`,
-      { id: slug, className: headingStyles[level] },
-      [
-        React.createElement("a", {
-          href: `#${slug}`,
-          key: `link-${slug}`,
-          className:
-            "anchor no-underline hover:underline text-blue-600 dark:text-blue-400 opacity-0 hover:opacity-100 transition-opacity duration-300 ml-2 text-sm hover:text-blue-800 dark:hover:text-blue-300",
-        }),
-      ],
-      children
+      { id: slug, className: `${headingStyles[level]} flex items-center` },
+      <>
+        {children}
+        <a
+          href={`#${slug}`}
+          className="anchor ml-2 text-sm text-blue-600 no-underline opacity-0 transition-opacity duration-300 hover:text-blue-800 hover:opacity-100 dark:text-blue-400 dark:hover:text-blue-300"
+        >
+          #
+        </a>
+      </>
     );
   };
 
@@ -324,6 +335,8 @@ const components = {
   code: Code,
   pre: Pre,
   Table,
+  // Add custom CodeBlock component for enhanced highlighting
+  CodeBlock,
 };
 
 export function CustomMDX(props: MDXRemoteProps) {

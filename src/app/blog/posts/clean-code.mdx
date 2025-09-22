@@ -1,5 +1,5 @@
 ---
-title: "Kenapa Clean Code Lebih Penting dari Sekadar "Kode yang Jalan""
+title: 'Kenapa Clean Code Lebih Penting daripada Sekadar "Kode yang Jalan"'
 publishedAt: "2025-09-21"
 summary: "Kenapa clean code bukan cuma teori dosen, tapi kunci bikin software scalable, maintainable, dan ramah developer di masa depan."
 categories: ["Programming", "Best Practices", "Software Engineering", "Coding Style"]
@@ -7,22 +7,38 @@ tags: ["clean-code", "best-practices", "beginner-friendly", "coding-style", "mai
 thumbnailUrl: "https://images.unsplash.com/photo-1590608897129-79da98d15969?w=800&h=450&q=80"
 ---
 
-Sebagai seorang mahasiswa komputer, kita sering dapat tugas yang penting cuma: asal program jalan, nilai A beres/ Habis itu file dikumpulin, dilupain. Padahal di dunia nyata "jalan" itu cuma syarat minimum.
+Kita sering dapat tugas yang pentingnya cuma: yang penting program jalan, nilai aman. Habis itu file dikumpulin dan dilupakan. Padahal di dunia nyata, “jalan” itu cuma syarat minimum.
 
-**Masalahnya**
-Kode yang cuma penting jalan biasanya:
+## Apa itu Clean Code?
 
-- Penuh magic number (angka random nongol tanpa konteks).
-- Nama variable kayak a, b, x yang bikin otak sakit seminggu kemudian.
-- Fungsi panjang 200 baris yang harus dibaca dari atas sampai bawah biar ngerti.
+Clean code adalah kode yang mudah dibaca, mudah dipahami, dan mudah diubah tanpa bikin efek samping tak terduga. Ibarat kamar kos yang rapi: barangnya sama, tapi kamu nggak perlu bongkar semuanya buat cari charger.
 
-**Clean Code itu**
+Karakter clean code secara umum:
 
-- Mudah dibaca - karna kodeny abukan cuma buat komputer, tapi buat manusia lain (termasuk kamu versi 3 bulan depan)
-- Mudah di-maintain - kalau ada bug, kamu nggak harus rewrite dari nol.
-- Reusable - nggak bikin kamu bikin ulang logika yang sama tiap kali bikin project baru
+- Mudah dibaca: kode dibuat untuk manusia, bukan hanya komputer (termasuk kamu versi 3 bulan ke depan).
+- Mudah di-maintain: kalau ada bug, perbaikan bisa terlokalisasi, nggak harus rewrite dari nol.
+- Reusable: logika yang sama tidak diulang-ulang di banyak tempat.
 
-**Contoh Sederhana**
+## Kenapa “Kode yang Jalan” Belum Cukup?
+
+Kode yang hanya “jalan” biasanya punya masalah seperti:
+
+- Penuh magic number (angka muncul tanpa konteks).
+- Nama variabel ambigu seperti `a`, `b`, `x` yang bikin bingung saat dibaca ulang.
+- Fungsi 200 baris yang bikin kamu harus baca dari atas sampai bawah untuk paham.
+
+Masalah ini nggak selalu bikin aplikasi crash hari ini, tapi pasti bikin lambat di masa depan: debugging lebih lama, fitur baru lebih susah nempel, dan risiko bug ikut naik.
+
+## Bagaimana Mulai Menerapkan Clean Code?
+
+- Beri nama yang bermakna: fungsi `convertToSeconds` jauh lebih jelas daripada `calc`.
+- Pecah fungsi menjadi kecil dan fokus: satu fungsi, satu tanggung jawab.
+- Hindari magic number: gunakan konstanta atau enum.
+- Konsisten dengan formatting: gunakan formatter (Prettier, Black, gofmt) agar diskusi fokus ke logika.
+- Tulis komentar untuk “mengapa”, bukan “apa”: kode menjelaskan apa yang dilakukan; komentar menjelaskan alasan.
+- Tambahkan test di area kritis: test adalah jaring pengaman saat refactor.
+
+## Contoh Sederhana
 
 ```python
 # Kode jelek
@@ -37,8 +53,8 @@ def convert_to_seconds(hours, minutes, seconds):
 print(convert_to_seconds(1, 20, 30))
 ```
 
-Kedua kode di atas jalan, tapi yang kedua bisa dibaca sama siapapun
+Keduanya jalan, tapi versi kedua lebih bisa dibaca siapa pun, mudah diubah, dan aman untuk di-reuse.
 
-## Kesimpulan
+## Penutup
 
-Clean code itu investasi. Kamu habiskan 5 menit ekstra untuk bikin kode rapi, tapi kamu hemat 2 jam waktu debugging di masa depan. Jadi, daripada kamu pamer "kode gw jalan" tapi yang baca "mudah dimengerti semoga harimu suram", coba bikin kode yang bisa bikin siapa aja yang baca bisa bilang "mudah dimengerti"
+Clean code itu investasi kecil dengan imbal hasil besar. Luangkan 5–10 menit ekstra untuk merapikan nama, memecah fungsi, dan menghapus duplikasi—kamu berpotensi menghemat berjam-jam debugging di masa depan. Tujuan akhirnya sederhana: kode yang rapi membuatmu (dan tim) bergerak lebih cepat, lebih tenang, dan lebih percaya diri.

@@ -1,0 +1,74 @@
+---
+title: "Strategi Branching Git untuk Tim Kecil: Simple Tapi Rapi"
+publishedAt: "2025-09-22"
+summary: "Bingung pilih Git Flow, GitHub Flow, atau Trunk-based? Ini panduan praktis buat tim 2–6 orang biar rilis tetap cepat dan aman."
+categories: ["Software Engineering", "Collaboration", "Version Control"]
+tags: ["git", "gitflow", "trunk-based", "github-flow", "release"]
+thumbnailUrl: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=1200&h=630&fit=crop&q=80&auto=format"
+---
+
+Kerja tim kecil itu seperti naik motor bareng—kalau koordinasi lancar, semua terasa gesit. Tapi kalau rutenya nggak jelas, baru dua belokan sudah nyasar. Strategi branching Git yang tepat bikin kerja bareng tetap cepat tanpa mengorbankan kualitas.
+
+<Figure
+  src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=1200&h=630&fit=crop&q=80&auto=format"
+  alt="Ilustrasi branch dan merge di Git"
+  width={1200}
+  height={630}
+/>
+
+## Apa itu Strategi Branching?
+
+Ini adalah cara tim menyepakati bagaimana membuat cabang (branch), menamai, menggabungkan (merge), dan merilis kode. Tanpa aturan, PR bisa menumpuk, konflik sering muncul, dan rilis jadi drama.
+
+Model populer:
+
+- Git Flow: banyak branch (develop, release, hotfix). Cocok untuk rilis besar berkala.
+- GitHub Flow: sederhana—main + feature branch; deploy kecil tapi sering.
+- Trunk-based: satu main (trunk), feature sangat pendek, merge cepat dengan feature flag.
+
+## Kenapa Tim Kecil Butuh Strategi Simple?
+
+- Kecepatan: lebih sedikit cabang = lebih sedikit overhead.
+- Konflik berkurang: PR kecil, merge sering.
+- Rilis aman: rollback ringkas, CI/CD fokus.
+
+Anggap seperti rapat harian: singkat, jelas, semua update tersampaikan. Nggak perlu protokol super kompleks kalau timnya kecil.
+
+## Bagaimana Memilih yang Pas?
+
+Pertimbangkan ini:
+
+- Frekuensi rilis: harian/pekannya? → GitHub Flow atau Trunk-based.
+- Regulasi/approval ketat? → Git Flow bisa membantu struktur.
+- Ukuran tim dan pengalaman: makin kecil/berpengalaman, trunk-based makin menarik.
+
+## Rekomendasi Praktis (Tim 2–6 Orang)
+
+- Pilihan 1: GitHub Flow
+  - `main` selalu bisa rilis.
+  - Branch: `feature/<short-slug>`.
+  - PR kecil (&lt; 300 LOC), wajib review, auto CI.
+  - Deploy otomatis ke staging saat PR dibuka; merge → production.
+
+- Pilihan 2: Trunk-based Lite
+  - Commit kecil langsung ke `main` via PR cepat.
+  - Pakai feature flag untuk work-in-progress.
+  - Branch maksimal 1–2 hari hidup, hindari long-lived branch.
+
+## Checklist Naming & Proteksi
+
+- Nama branch: `feat/`, `fix/`, `chore/`, `refactor/` + deskripsi singkat.
+- Proteksi `main`: wajib PR, 1 review, lulus CI, tidak boleh force push.
+- Conventional commits untuk pesan yang konsisten.
+
+## Contoh Alur Harian (GitHub Flow)
+
+1. Buat issue → branch `feat/add-user-search`.
+2. Commit kecil-kecil; pastikan test jalan lokal.
+3. Buka PR; CI jalan otomatis.
+4. Review singkat (komentar fokus ke perilaku dan risiko).
+5. Merge squash ke `main`; deploy otomatis.
+
+## Penutup
+
+Tim kecil nggak butuh aturan rumit, tapi tetap perlu disiplin. Pilih strategi yang ringan (GitHub Flow atau Trunk-based), jaga PR kecil dan sering, lindungi `main` dengan CI. Hasilnya: rilis cepat, konflik minim, dan semua lebih tenang.

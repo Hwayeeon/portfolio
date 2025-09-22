@@ -1,0 +1,66 @@
+---
+title: "Designing RESTful APIs yang Bertahan Lama"
+publishedAt: "2025-09-22"
+summary: "Prinsip, pola, dan contoh praktis untuk API yang mudah dipakai, mudah diubah, dan kuat menghadapi pertumbuhan fitur."
+categories: ["Backend", "API Design", "Best Practices"]
+tags: ["rest", "http", "api-design", "versioning", "error-handling", "pagination"]
+thumbnailUrl: "https://images.unsplash.com/photo-1529101091764-c3526daf38fe?w=1200&h=630&fit=crop&q=80&auto=format"
+---
+
+API yang baik itu seperti pintu otomatis di mall: jelas aksesnya, tidak bikin orang nabrak, dan tetap lancar meski ramai. Desain yang matang bikin tim frontend, mobile, dan partner integrasi kerja lebih cepat.
+
+<Figure
+  src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=1200&h=630&fit=crop&q=80&auto=format"
+  alt="Arsitektur API dan integrasi layanan"
+  width={1200}
+  height={630}
+/>
+
+## Apa itu RESTful API?
+
+REST mengikuti prinsip resource-oriented: setiap entitas (users, orders) direpresentasikan sebagai resource dengan endpoint yang konsisten.
+
+Contoh resource dan method:
+
+- `GET /users` (list), `POST /users` (create)
+- `GET /users/{id}`, `PUT/PATCH /users/{id}`, `DELETE /users/{id}`
+
+## Kenapa Desain Penting?
+
+- Konsistensi mempercepat pengembangan klien.
+- Evolusi mudah: ada jalur versi dan deprecation yang rapi.
+- Observabilitas: error handling dan logging jelas.
+
+## Bagaimana Mendesain yang Baik?
+
+- Penamaan resource jamak: `/users`, `/orders`.
+- Gunakan HTTP semantics: status code 2xx/4xx/5xx yang akurat.
+- Pagination dan filtering konsisten: `?page=1&limit=20&sort=-createdAt`.
+- Error format terstandar: `type`, `title`, `detail`, `traceId`.
+- Idempotensi untuk `PUT`/`DELETE`. Gunakan `Idempotency-Key` untuk operasi tidak idempotent.
+- Versioning: `Accept: application/vnd.myapi.v2+json` atau `/v2/...`.
+
+## Contoh Response yang Rapi
+
+```json
+{
+  "data": [{ "id": "123", "name": "Ayu" }],
+  "meta": { "page": 1, "limit": 20, "total": 135 },
+  "links": { "next": "/users?page=2&limit=20" }
+}
+```
+
+## Autentikasi & Rate Limit
+
+- Gunakan OAuth2/JWT sesuai kebutuhan.
+- Rate limit per IP/API key; balas header `Retry-After` saat limit tercapai.
+
+## Observabilitas & Stabilitas
+
+- Trace-ID per request, korelasi log antar layanan.
+- Circuit breaker dan retry dengan backoff.
+- SLA/SLI/SLO untuk ekspektasi performa.
+
+## Penutup
+
+API yang dirancang baik akan tetap relevan meski kebutuhan bertambah. Pegang prinsip, buat standar tim, dan disiplin di review. Hasilnya: integrasi cepat, bug lebih sedikit, dan developer experience naik.

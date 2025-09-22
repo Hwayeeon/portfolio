@@ -3,36 +3,73 @@
 import { useState, useEffect } from "react";
 import { Check, Copy } from "lucide-react";
 import { codeToHtml } from "shiki";
+import React from "react";
 
 interface CodeBlockProps {
   children: string;
   language?: string;
   filename?: string;
   showLineNumbers?: boolean;
+  title?: string;
 }
 
-export function CodeBlock({ children, language = "text", filename }: CodeBlockProps) {
+function escapeHtml(text: string): string {
+  const map: { [key: string]: string } = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
+  };
+  return text.replace(/[&<>"']/g, (char) => map[char] || char);
+}
+
+export function CodeBlock({
+  children,
+  language = "text",
+  filename,
+  title,
+  showLineNumbers = false,
+}: CodeBlockProps) {
   const [isCopied, setIsCopied] = useState(false);
   const [highlightedCode, setHighlightedCode] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function highlightCode() {
       try {
+        setIsLoading(true);
+
+        // Normalize language name
+        const normalizedLang = language.toLowerCase().trim();
+        const langMap: { [key: string]: string } = {
+          js: "javascript",
+          ts: "typescript",
+          py: "python",
+          sh: "bash",
+          yml: "yaml",
+          md: "markdown",
+        };
+        const finalLang = langMap[normalizedLang] || normalizedLang || "text";
+
         const html = await codeToHtml(children.trim(), {
-          lang: language,
+          lang: finalLang,
           theme: "github-dark",
         });
         setHighlightedCode(html);
       } catch (error) {
         console.error("Error highlighting code:", error);
+        // Fallback with better styling
         setHighlightedCode(
-          `<pre class="bg-[#0d1117] p-4 rounded overflow-x-auto"><code class="font-mono text-sm">${children}</code></pre>`
+          `<pre class="bg-[#0d1117] text-[#e6edf3] p-4 rounded overflow-x-auto border border-gray-700"><code class="font-mono text-sm leading-relaxed">${escapeHtml(children)}</code></pre>`
         );
+      } finally {
+        setIsLoading(false);
       }
     }
 
     highlightCode();
-  }, [children, language]);
+  }, [children, language, showLineNumbers]);
 
   const copyToClipboard = async () => {
     try {
@@ -44,12 +81,75 @@ export function CodeBlock({ children, language = "text", filename }: CodeBlockPr
     }
   };
 
+  const displayTitle = title || filename;
+  const displayLanguage = language && language !== "text" ? language.toLowerCase() : "";
+
+  // Better language display names
+  const languageDisplayNames: { [key: string]: string } = {
+    javascript: "JavaScript",
+    typescript: "TypeScript",
+    python: "Python",
+    html: "HTML",
+    css: "CSS",
+    bash: "Bash",
+    shell: "Shell",
+    sql: "SQL",
+    json: "JSON",
+    yaml: "YAML",
+    markdown: "Markdown",
+    tsx: "TSX",
+    jsx: "JSX",
+  };
+
+  const prettyLanguage = displayLanguage
+    ? languageDisplayNames[displayLanguage] || displayLanguage.toUpperCase()
+    : "";
+
+  if (isLoading) {
+    return (
+      <div className="group relative my-6">
+        {displayTitle && (
+          <div className="bg-muted border-border flex items-center justify-between rounded-t-lg border px-4 py-2">
+            <span className="text-muted-foreground text-sm font-medium">{displayTitle}</span>
+            {prettyLanguage && (
+              <span className="text-muted-foreground font-mono text-xs tracking-wide uppercase">
+                {prettyLanguage}
+              </span>
+            )}
+          </div>
+        )}
+        <div
+          className={`bg-[#0d1117] ${displayTitle ? "rounded-t-none" : "rounded-lg"} border-border border p-4`}
+        >
+          <div className="animate-pulse">
+            <div className="mb-2 h-4 w-3/4 rounded bg-gray-600"></div>
+            <div className="mb-2 h-4 w-1/2 rounded bg-gray-600"></div>
+            <div className="h-4 w-2/3 rounded bg-gray-600"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="group relative my-6">
-      {filename && (
+      {displayTitle && (
         <div className="bg-muted border-border flex items-center justify-between rounded-t-lg border px-4 py-2">
-          <span className="text-muted-foreground text-sm font-medium">{filename}</span>
-          <span className="text-muted-foreground text-xs uppercase">{language}</span>
+          <span className="text-muted-foreground text-sm font-medium">{displayTitle}</span>
+          {prettyLanguage && (
+            <span className="text-muted-foreground font-mono text-xs tracking-wide uppercase">
+              {prettyLanguage}
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Show language badge if no title but there's a language */}
+      {!displayTitle && prettyLanguage && (
+        <div className="bg-muted border-border absolute top-3 left-3 z-10 rounded border px-2 py-1">
+          <span className="text-muted-foreground font-mono text-xs tracking-wide uppercase">
+            {prettyLanguage}
+          </span>
         </div>
       )}
 
@@ -67,7 +167,7 @@ export function CodeBlock({ children, language = "text", filename }: CodeBlockPr
         </button>
 
         <div
-          className={`${filename ? "rounded-t-none" : "rounded-lg"} border-border overflow-hidden border [&>pre]:!m-0 [&>pre]:!rounded-none [&>pre]:!border-none`}
+          className={`${displayTitle ? "rounded-t-none" : "rounded-lg"} border-border overflow-hidden border [&>pre]:!m-0 [&>pre]:!rounded-none [&>pre]:!border-none [&>pre]:!bg-[#0d1117]`}
           dangerouslySetInnerHTML={{ __html: highlightedCode }}
         />
       </div>

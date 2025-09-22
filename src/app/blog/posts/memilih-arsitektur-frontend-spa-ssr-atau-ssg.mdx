@@ -1,0 +1,108 @@
+---
+title: "Memilih Arsitektur Frontend: SPA, SSR, atau SSG?"
+publishedAt: "2025-09-22"
+summary: "Biar nggak FOMO: pahami kapan pakai SPA, SSR, atau SSG—dengan analogi sederhana, contoh praktis, dan trade-off yang jelas."
+categories: ["Frontend", "Web Architecture", "Best Practices"]
+tags: ["spa", "ssr", "ssg", "nextjs", "performance", "seo"]
+thumbnailUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=630&fit=crop&q=80&auto=format"
+---
+
+Kamu pernah bingung pilih arsitektur frontend? Tenang, kamu nggak sendiri. Dunia frontend itu kayak milih transportasi: mau motor (gesit), mobil (nyaman), atau kereta (stabil dan hemat)? Jawabannya tergantung tujuan dan kondisi jalan.
+
+Artikel ini ngebahas tiga pendekatan populer—SPA, SSR, dan SSG—dengan cara simpel tapi tetap tajam. Targetnya: kamu bisa memilih dengan percaya diri untuk project berikutnya.
+
+## Apa itu SPA, SSR, dan SSG?
+
+- SPA (Single Page Application): Aplikasi dimuat sekali, lalu halaman berikutnya dirender di sisi client (browser). Navigasi cepat, tapi butuh optimasi untuk SEO dan load pertama.
+- SSR (Server-Side Rendering): HTML dirender di server untuk tiap request. Load pertama cepat, SEO bagus, tapi beban server lebih tinggi.
+- SSG (Static Site Generation): Halaman dirender saat build dan disajikan sebagai file statis. Sangat cepat, murah, tapi tidak cocok untuk data yang sering berubah real-time.
+
+Analogi sehari-hari:
+
+- SPA = motor matic: lincah di dalam kota, tapi butuh perlengkapan ekstra saat hujan (optimasi SEO, code-splitting).
+- SSR = taksi online: selalu siap antar sesuai rute saat itu, tapi biaya operasional naik.
+- SSG = kereta: jadwal terencana, super cepat, tapi kurang fleksibel kalau ada perubahan mendadak.
+
+## Kenapa pilihan ini penting?
+
+- Pengalaman pengguna: waktu muat dan interaksi menentukan retensi.
+- SEO & shareability: SSR/SSG unggul untuk halaman yang perlu ranking.
+- Biaya & kompleksitas: SSG bisa hemat, SSR butuh infrastruktur server yang andal.
+- Maintainability: arsitektur yang tepat bikin tim lebih fokus bangun fitur, bukan padamkan api.
+
+## Bagaimana memilih dengan tepat?
+
+Gunakan checklist ini sebagai kompas.
+
+### 1) Frekuensi perubahan data
+
+- Real-time atau per menit? → SSR atau hybrid (ISR/SSR)
+- Per jam/hari atau konten evergreen? → SSG dengan revalidate
+
+### 2) Kebutuhan SEO dan sosial
+
+- Perlu index cepat dan metadata akurat? → SSR/SSG
+- SPA tetap bisa, tapi butuh SSR untuk halaman tertentu (misal `/product/[slug]`).
+
+### 3) Skala dan biaya
+
+- Trafik meledak? SSG skala otomatis dengan CDN.
+- Banyak halaman personalisasi? SSR atau SPA + API cache.
+
+### 4) Kompleksitas interaksi
+
+- Dashboard kaya interaksi → SPA/SSR
+- Blog, docs, landing → SSG
+
+## Contoh keputusan (Next.js)
+
+- Blog/Docs: SSG + ISR (revalidate per 60–300 detik)
+- E-commerce katalog: SSG untuk listing, SSR untuk detail produk dan cart
+- SaaS dashboard: SSR untuk initial load + SPA navigasi internal
+
+```tsx
+// Contoh Next.js (app router) - SSG dengan revalidate
+export const revalidate = 300; // 5 menit
+
+export default async function Page() {
+  const products = await getProducts(); // dipanggil saat build / revalidate
+  return <ProductList items={products} />;
+}
+```
+
+```tsx
+// Contoh Next.js - SSR penuh
+export const dynamic = "force-dynamic"; // selalu render di server
+
+export default async function Page() {
+  const session = await getSession();
+  const data = await fetchData(session.user.id);
+  return <Dashboard data={data} />;
+}
+```
+
+## Trade-off ringkas
+
+- SPA: + Interaksi kaya, + navigasi cepat, − SEO/first load perlu effort.
+- SSR: + SEO/first load bagus, − beban server, − latency per request.
+- SSG: + super cepat/hemat, − tidak fleksibel untuk data sering berubah.
+
+## Pola Hybrid Modern (Recommended)
+
+- SSG untuk halaman statis (home, blog, marketing).
+- SSR untuk halaman yang butuh data terbaru/personal.
+- Client-side fetching untuk interaksi setelah initial render.
+- Gunakan ISR (Incremental Static Regeneration) untuk update berkala.
+
+<Figure
+  src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&h=630&fit=crop&q=80&auto=format"
+  alt="Arsitektur hybrid: menggabungkan SSG, SSR, dan CSR"
+  width={1200}
+  height={630}
+/>
+
+## Penutup
+
+Nggak ada pilihan yang selalu benar. Yang ada: pilihan yang tepat untuk konteks. Pahami data kamu, kebutuhan SEO, skala, dan jenis interaksi. Mulai pragmatis: pakai SSG untuk konten, SSR untuk halaman yang butuh data terbaru, dan biarkan client-side untuk interaksi lanjutan.
+
+Dengan pola hybrid, kamu bisa dapat yang terbaik dari ketiganya—cepat, SEO-friendly, dan tetap fleksibel.

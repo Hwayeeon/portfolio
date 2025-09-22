@@ -1,0 +1,180 @@
+---
+title: "Machine Learning Crash Course: Dari Nol sampai Deploy"
+publishedAt: "2025-09-22"
+summary: "Belajar ML kilat: konsep inti, alur end-to-end, contoh kode Python (scikit-learn), evaluasi model, sampai gambaran deploy dengan FastAPI."
+categories: ["Machine Learning", "AI", "Tutorial"]
+tags: ["machine-learning", "python", "scikit-learn", "pandas", "data-science", "mlops"]
+thumbnailUrl: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&h=630&fit=crop&q=80&auto=format"
+---
+
+Pengen belajar machine learning tapi waktunya mepet? Anggap ini kursus kilat. Kita akan bahas konsep paling penting, jalur end-to-end, dan contoh kode yang bisa langsung dicoba.
+
+Bayangin ML seperti belajar naik sepeda. Di awal agak goyang, tapi begitu paham keseimbangan (data, model, evaluasi), kamu bisa ngebut dan improvisasi.
+
+<Figure
+  src="https://images.unsplash.com/photo-1517148815978-75f6acaaf32c?w=1200&h=630&fit=crop&q=80&auto=format"
+  alt="Ilustrasi konsep machine learning: data, model, evaluasi"
+  width={1200}
+  height={630}
+/>
+
+## Apa itu Machine Learning?
+
+Secara sederhana, ML membuat komputer belajar pola dari data untuk memprediksi sesuatu di masa depan.
+
+Istilah penting:
+
+- Fitur (features): variabel input, misalnya umur, gaji, jumlah klik.
+- Label/Target: yang ingin diprediksi, misalnya kelas spam/tidak spam atau harga rumah.
+- Model: fungsi yang dipelajari dari data (contoh: logistic regression, random forest).
+- Training & Testing: melatih model di sebagian data, menguji di data yang belum pernah dilihat.
+- Overfitting: model terlalu hafal data latihan; performa jeblok di data baru.
+
+Tipe masalah umum:
+
+- Klasifikasi (kategori): spam atau bukan, fraud atau tidak.
+- Regresi (angka): prediksi harga, waktu tempuh.
+- Clustering (kelompok): segmentasi pelanggan tanpa label.
+
+## Kenapa Perlu ML?
+
+- Otomasi keputusan berulang (review otomatis, rekomendasi).
+- Menangkap pola kompleks yang sulit ditulis dengan rules manual.
+- Membantu prediksi: demand forecasting, churn, maintenance.
+
+Pikirkan ML sebagai asisten analitik yang cepat, konsisten, dan bisa ditingkatkan performanya seiring bertambahnya data.
+
+## Bagaimana Alurnya (End-to-End)?
+
+1. Definisikan masalah dan metrik sukses (akurasi? F1? MAE?).
+2. Kumpulkan dan bersihkan data (missing values, outliers, encoding).
+3. Bagi data: train/validation/test (mis. 70/15/15).
+4. Buat baseline sederhana (jangan langsung deep learning).
+5. Latih model + evaluasi di validation.
+6. Tingkatkan: feature engineering, regularisasi, hyperparameter tuning, cross-validation.
+7. Uji final di test set (sekali saja!).
+8. Deploy model + monitor (drift, performa, latency).
+
+Tips cepat: Mulai dari yang paling sederhana yang mungkin berhasil. Optimasi belakangan.
+
+## Contoh Praktis 1: Klasifikasi dengan scikit-learn
+
+Kita pakai dataset Iris (klasifikasi spesies bunga). Fokus ke pipeline dan evaluasi.
+
+```python
+# requirements: scikit-learn, numpy, matplotlib (opsional)
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# 1) Data
+data = load_iris()
+X, y = data.data, data.target
+
+# 2) Split
+test_size = 0.2
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42, stratify=y)
+
+# 3) Pipeline (scaling + model)
+clf = Pipeline([
+    ("scaler", StandardScaler()),
+    ("logreg", LogisticRegression(max_iter=500))
+])
+
+# 4) Training
+clf.fit(X_train, y_train)
+
+# 5) Evaluasi
+pred = clf.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, pred))
+print("\nReport:\n", classification_report(y_test, pred, target_names=data.target_names))
+
+# 6) Cross-validation untuk cek stabilitas
+scores = cross_val_score(clf, X, y, cv=5)
+print("CV mean:", scores.mean(), "±", scores.std())
+```
+
+Kenapa pakai `Pipeline`? Biar preprocessing dan model jadi satu paket, meminimalkan kebocoran data (data leakage) dan memudahkan deploy.
+
+## Contoh Praktis 2: Regresi Cepat
+
+Prediksi progresi penyakit diabetes (angka kontinu) dengan Linear Regression.
+
+```python
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import mean_absolute_error, r2_score
+
+X, y = load_diabetes(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+reg = Pipeline([
+    ("scaler", StandardScaler()),
+    ("linreg", LinearRegression())
+])
+
+reg.fit(X_train, y_train)
+y_pred = reg.predict(X_test)
+print("MAE:", mean_absolute_error(y_test, y_pred))
+print("R^2:", r2_score(y_test, y_pred))
+```
+
+MAE kecil dan R² mendekati 1 menandakan model lebih baik. Jangan lupa bandingkan dengan baseline sederhana (mis. menebak median).
+
+## Meningkatkan Model tanpa Drama
+
+- Feature engineering: skala, log-transform, gabung fitur yang relevan.
+- Regularisasi: `LogisticRegression(C=...)`, `Ridge/Lasso` untuk cegah overfitting.
+- Hyperparameter tuning: `GridSearchCV` / `RandomizedSearchCV`.
+- Cross-validation: maksimalkan data latihan dan cek stabilitas.
+- Data first: model bagus tidak bisa menyelamatkan data yang berantakan.
+
+## Gambaran Deploy Cepat (FastAPI)
+
+Sketsa sederhana agar model bisa dipakai aplikasi lain. Di dunia nyata pakai juga versi model, auth, dan observability.
+
+```python
+# app.py
+from fastapi import FastAPI
+from pydantic import BaseModel
+import joblib
+
+app = FastAPI()
+model = joblib.load("model.joblib")  # simpan: joblib.dump(clf, "model.joblib")
+
+class IrisInput(BaseModel):
+    sepal_length: float
+    sepal_width: float
+    petal_length: float
+    petal_width: float
+
+@app.post("/predict")
+def predict(inp: IrisInput):
+    X = [[inp.sepal_length, inp.sepal_width, inp.petal_length, inp.petal_width]]
+    pred = model.predict(X)[0]
+    return {"class": int(pred)}
+```
+
+Opsional: bungkus dengan Docker, deploy ke layanan seperti Fly.io, Render, atau Cloud Run. Untuk skala lebih besar, pertimbangkan MLflow, BentoML, atau Sagemaker.
+
+## Checklist Anti Nyasar
+
+- Problem jelas, metrik jelas.
+- Data dibersihkan, split dengan benar, tidak ada leakage.
+- Baseline dibuat sebelum eksperimen mewah.
+- Evaluasi pakai cross-validation untuk stabilitas.
+- Catat eksperimen (params, skor) biar reproducible.
+- Rencana deploy + monitor: log prediksi, cek drift.
+
+## Penutup
+
+Machine Learning tidak harus menakutkan. Kuasai konsep dasar (data → model → evaluasi → deploy), pakai alat yang tepat (scikit-learn untuk start), dan iterasi cepat dengan baseline yang kuat.
+
+Dengan pola ini, kamu bisa membangun model yang bermanfaat—tanpa tersesat di lautan jargon. Selamat bereksperimen!
