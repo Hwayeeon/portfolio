@@ -3,7 +3,20 @@ title: "Memilih Framework yang Tepat untuk Project yang Tepat"
 publishedAt: "2025-09-22"
 summary: "Bukan soal yang paling hype, tapi yang paling pas. Panduan lengkap dengan tabel kelebihan/kekurangan, use case, dan contoh keputusan."
 categories: ["Architecture", "Frontend", "Backend", "Best Practices"]
-tags: ["framework", "react", "nextjs", "vue", "nuxt", "svelte", "sveltekit", "express", "nestjs", "django", "laravel"]
+tags:
+  [
+    "framework",
+    "react",
+    "nextjs",
+    "vue",
+    "nuxt",
+    "svelte",
+    "sveltekit",
+    "express",
+    "nestjs",
+    "django",
+    "laravel",
+  ]
 thumbnailUrl: "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?w=1200&h=630&fit=crop&q=80&auto=format"
 ---
 
@@ -11,8 +24,8 @@ Framework itu seperti kendaraan. Ada yang lincah buat dalam kota, ada yang stabi
 
 Artikel ini membahas cara memilih framework secara rasional: faktor yang perlu dipertimbangkan, peta kekuatan/kelemahan framework populer, dan contoh keputusan nyata.
 
-<Figure 
-  src="https://images.unsplash.com/photo-1526948128573-703ee1aeb6fa?w=1200&h=630&fit=crop&q=80&auto=format" 
+<Figure
+  src="https://images.unsplash.com/photo-1526948128573-703ee1aeb6fa?w=1200&h=630&fit=crop&q=80&auto=format"
   alt="Memilih kendaraan sesuai kebutuhan—analogi memilih framework"
   width={1200}
   height={630}
@@ -38,39 +51,39 @@ Artikel ini membahas cara memilih framework secara rasional: faktor yang perlu d
         "React",
         "Ekosistem sangat luas, komunitas besar, fleksibel pilihan stack",
         "Butuh banyak keputusan (routing, state, data fetching), boilerplate bisa tebal",
-        "SPA kompleks, tim ingin fleksibilitas tinggi"
+        "SPA kompleks, tim ingin fleksibilitas tinggi",
       ],
       [
         "Next.js",
         "SSR/SSG/ISR built-in, routing file-based, gambar & font optimasi, dukungan Edge",
         "Ada kurva belajar App Router, beberapa fitur opiniated",
-        "Marketing site, blog, e-commerce, dashboard dengan SEO"
+        "Marketing site, blog, e-commerce, dashboard dengan SEO",
       ],
       [
         "Vue",
         "Lebih sederhana untuk pemula, reactivity intuitif",
         "Ekosistem lebih kecil dari React, variasi pattern antar proyek",
-        "SPA kecil–menengah, tim suka sintaks template"
+        "SPA kecil–menengah, tim suka sintaks template",
       ],
       [
         "Nuxt",
         "SSR/SSG untuk Vue, konvensi rapi, DX bagus",
         "Lebih opiniated, update mayor perlu adaptasi",
-        "Konten/SEO, e-commerce ringan, portal dokumentasi"
+        "Konten/SEO, e-commerce ringan, portal dokumentasi",
       ],
       [
         "Svelte",
         "Bundle kecil, performa tinggi, sintaks minimalis",
         "Ekosistem lebih muda, tooling belum seluas React/Vue",
-        "Widget ringan, micro-frontend, prototyping UI"
+        "Widget ringan, micro-frontend, prototyping UI",
       ],
       [
         "SvelteKit",
         "Routing + SSR/SSG terintegrasi, API endpoints built-in",
         "Perubahan API cukup cepat, perlu ikuti rilis",
-        "Aplikasi full-stack ringan hingga menengah"
-      ]
-    ]
+        "Aplikasi full-stack ringan hingga menengah",
+      ],
+    ],
   }}
 />
 
@@ -84,39 +97,39 @@ Artikel ini membahas cara memilih framework secara rasional: faktor yang perlu d
         "Express (Node.js)",
         "Sederhana, fleksibel, ekosistem NPM luas",
         "Butuh banyak keputusan (struktur, validasi, DI), mudah berantakan",
-        "API ringan, prototyping cepat, microservices"
+        "API ringan, prototyping cepat, microservices",
       ],
       [
         "NestJS (Node.js)",
         "Arsitektur opinionated (MVC/DI), modular, TypeScript first",
         "Lebih berat untuk kasus sederhana",
-        "Enterprise API, tim besar, skalabilitas & testability"
+        "Enterprise API, tim besar, skalabilitas & testability",
       ],
       [
         "Django (Python)",
         "Batteries-included: ORM, admin, auth, form, i18n",
         "Bisa terasa berat untuk API sederhana",
-        "Aplikasi data-heavy, CRUD cepat, panel admin kuat"
+        "Aplikasi data-heavy, CRUD cepat, panel admin kuat",
       ],
       [
         "FastAPI (Python)",
         "Performa bagus, type hints, dokumentasi otomatis (OpenAPI)",
         "Ekosistem plugin lebih muda dari Django",
-        "Microservices, ML serving, API performa tinggi"
+        "Microservices, ML serving, API performa tinggi",
       ],
       [
         "Laravel (PHP)",
         "DX bagus, ORM Eloquent, scaffolding cepat, komunitas besar",
         "Runtime PHP di beberapa stack butuh tuning",
-        "Aplikasi web lengkap, monolith yang rapi"
+        "Aplikasi web lengkap, monolith yang rapi",
       ],
       [
         "Spring Boot (Java)",
         "Stabil, kaya integrasi enterprise, observability matang",
         "Lebih berat dan verbose untuk small apps",
-        "Enterprise scale, integrasi kompleks, compliance"
-      ]
-    ]
+        "Enterprise scale, integrasi kompleks, compliance",
+      ],
+    ],
   }}
 />
 
