@@ -56,7 +56,7 @@ export function NewsletterForm() {
           message: data.message || "Something went wrong. Please try again.",
         }));
       }
-    } catch (error) {
+    } catch {
       setState((prev) => ({
         ...prev,
         status: "error",

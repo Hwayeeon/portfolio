@@ -7,12 +7,6 @@ import { NextRequest, NextResponse } from "next/server";
 // - Resend
 // - Buttondown
 
-interface NewsletterSubscription {
-  email: string;
-  subscribedAt: string;
-  source: string;
-}
-
 // Simple in-memory storage for demo (use database in production)
 const subscribers = new Set<string>();
 

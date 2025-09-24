@@ -4,23 +4,14 @@ import React from "react";
 /**
  * Creates a lazy-loaded component with error boundary
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createLazyComponent<T extends ComponentType<any>>(
   factory: () => Promise<{ default: T }>,
-  fallback?: React.ComponentType,
-  errorFallback?: React.ComponentType<{ error: Error; retry: () => void }>
+  fallback?: React.ComponentType
 ): ComponentType<React.ComponentProps<T>> {
   const LazyComponent = lazy(factory);
 
   return function LazyWrapper(props: React.ComponentProps<T>) {
-    const ErrorFallback =
-      errorFallback ||
-      (() =>
-        React.createElement(
-          "div",
-          { className: "p-4 text-center text-muted-foreground" },
-          "Failed to load component"
-        ));
-
     const FallbackComponent =
       fallback ||
       (() => React.createElement("div", { className: "animate-pulse bg-muted rounded h-20" }));
@@ -28,7 +19,8 @@ export function createLazyComponent<T extends ComponentType<any>>(
     return React.createElement(
       Suspense,
       { fallback: React.createElement(FallbackComponent) },
-      React.createElement(LazyComponent, props)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      React.createElement(LazyComponent, props as any)
     );
   };
 }
@@ -36,6 +28,7 @@ export function createLazyComponent<T extends ComponentType<any>>(
 /**
  * Preloads a dynamic component for better performance
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function preloadComponent<T extends ComponentType<any>>(
   factory: () => Promise<{ default: T }>
 ): Promise<void> {
@@ -49,24 +42,27 @@ export const LazyComponents = {
   // Blog components
   BlogSearch: createLazyComponent(
     async () => {
-      const module = await import("@/components/blog-search");
-      return { default: module.BlogSearch };
+      const { BlogSearch } = await import("@/components/blog-search");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return { default: BlogSearch as ComponentType<any> };
     },
     () => React.createElement("div", { className: "h-10 bg-muted animate-pulse rounded" })
   ),
 
   TableOfContents: createLazyComponent(
     async () => {
-      const module = await import("@/components/table-of-contents");
-      return { default: module.TableOfContents };
+      const { TableOfContents } = await import("@/components/table-of-contents");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return { default: TableOfContents as ComponentType<any> };
     },
     () => React.createElement("div", { className: "w-48 h-32 bg-muted animate-pulse rounded" })
   ),
 
   ReadingProgress: createLazyComponent(
     async () => {
-      const module = await import("@/components/reading-progress");
-      return { default: module.ReadingProgress };
+      const { ReadingProgress } = await import("@/components/reading-progress");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return { default: ReadingProgress as ComponentType<any> };
     },
     () => React.createElement("div", { className: "h-1 bg-muted animate-pulse" })
   ),
@@ -74,8 +70,9 @@ export const LazyComponents = {
   // Project components
   ProjectList: createLazyComponent(
     async () => {
-      const module = await import("@/components/project-list");
-      return { default: module.ProjectList };
+      const { ProjectList } = await import("@/components/project-list");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return { default: ProjectList as ComponentType<any> };
     },
     () =>
       React.createElement(
@@ -93,8 +90,9 @@ export const LazyComponents = {
   // Performance monitoring (only in production)
   PerformanceMonitor: createLazyComponent(
     async () => {
-      const module = await import("@/components/performance-monitor");
-      return { default: module.PerformanceMonitor };
+      const { PerformanceMonitor } = await import("@/components/performance-monitor");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return { default: PerformanceMonitor as ComponentType<any> };
     },
     () => null
   ),

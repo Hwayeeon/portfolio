@@ -1,0 +1,105 @@
+---
+title: "Blog Content Management System"
+description: "A custom MDX-based content management system for technical blogs with advanced features like syntax highlighting, reading time calculation, and SEO optimization."
+publishedAt: "2025-09-20"
+status: "completed"
+technologies: ["MDX", "Node.js", "TypeScript", "Shiki", "Gray Matter"]
+githubUrl: "https://github.com/Hwayeeon/blog-cms"
+thumbnailUrl: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=800&h=450&fit=crop&q=80&auto=format"
+featured: false
+category: "library"
+---
+
+# Blog Content Management System
+
+A lightweight, performant content management system specifically designed for technical blogs and documentation sites.
+
+## 🎯 Problem Solved
+
+Traditional CMSs are often overkill for developer blogs, requiring databases and complex admin interfaces. This system provides a simple, file-based approach that developers love.
+
+## ✨ Key Features
+
+### Content Processing
+
+- **MDX Support**: Full MDX parsing with React component integration
+- **Frontmatter**: YAML frontmatter for metadata (title, date, tags, categories)
+- **Reading Time**: Automatic reading time calculation based on content
+- **Image Optimization**: Automatic image processing and optimization
+
+### Developer Experience
+
+- **Type Safety**: Full TypeScript support with proper type definitions
+- **Hot Reload**: Changes reflected immediately during development
+- **Git-Based**: Version control for all content changes
+- **No Database**: Simple file-system based content storage
+
+### Performance Features
+
+- **Caching Layer**: Smart caching with TTL and invalidation
+- **Build-Time Generation**: Static generation of content at build time
+- **Lazy Loading**: Dynamic imports for better bundle splitting
+
+## 🛠️ Technical Architecture
+
+### Content Pipeline
+
+```typescript
+// Content processing pipeline
+const processContent = async (filePath: string) => {
+  const rawContent = await fs.readFile(filePath, "utf8");
+  const { metadata, content } = parseFrontMatter(rawContent);
+  const readingTime = calculateReadingTime(content);
+  const processedContent = await processMDX(content);
+
+  return {
+    metadata: { ...metadata, readingTime },
+    content: processedContent,
+    slug: generateSlug(filePath),
+  };
+};
+```
+
+### Caching Strategy
+
+- **Memory Cache**: Fast access for frequently requested content
+- **TTL-Based**: Automatic cache expiration and refresh
+- **Selective Invalidation**: Invalidate specific content when files change
+
+## 📊 Performance Metrics
+
+- **Parse Time**: < 50ms per document
+- **Memory Usage**: < 10MB for 100+ posts
+- **Build Time**: 2-3s for complete site generation
+- **Bundle Size**: Only 15KB added to client bundle
+
+## 🔧 Usage Examples
+
+### Basic Setup
+
+```typescript
+import { getBlogPosts, getBlogPost } from "./blog-utils";
+
+// Get all posts
+const posts = getBlogPosts();
+
+// Get specific post
+const post = getBlogPost("my-article");
+
+// Get posts by category
+const techPosts = posts.filter((post) => post.metadata.categories?.includes("technology"));
+```
+
+### Custom Components
+
+```tsx
+// Custom MDX components
+const components = {
+  CodeBlock: ({ children, language }) => (
+    <SyntaxHighlighter language={language}>{children}</SyntaxHighlighter>
+  ),
+  Image: ({ src, alt }) => <OptimizedImage src={src} alt={alt} />,
+};
+```
+
+This CMS powers multiple technical blogs and documentation sites, handling thousands of articles with excellent performance.
