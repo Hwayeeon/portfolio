@@ -59,7 +59,10 @@ export function CodeBlock({ children, language = "text", filename, title }: Code
 
         setHighlightedCode(html);
       } catch (error) {
-        console.error("Error highlighting code:", error);
+        // Log error in development, fail silently in production
+        if (process.env.NODE_ENV === "development") {
+          console.error("Error highlighting code:", error);
+        }
         // Fallback to escaped HTML
         setHighlightedCode(`<pre><code>${escapeHtml(children)}</code></pre>`);
       } finally {
@@ -76,7 +79,9 @@ export function CodeBlock({ children, language = "text", filename, title }: Code
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     } catch (error) {
-      console.error("Failed to copy:", error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Failed to copy:", error);
+      }
     }
   };
 

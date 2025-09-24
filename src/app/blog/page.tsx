@@ -35,6 +35,7 @@ export default function BlogPage() {
           </p>
         </div>
       </header>
+
       <Suspense fallback={<div className="py-8 text-center">Loading posts...</div>}>
         <BlogPosts />
       </Suspense>

@@ -5,6 +5,9 @@ import Link from "next/link";
 import { CustomMDX } from "@/components/mdx";
 import { formatDate, getBlogPosts, getBlogPostBySlug, type BlogPost } from "../utils";
 import { baseUrl } from "@/app/sitemap";
+import { ReadingProgress } from "@/components/reading-progress";
+import { NewsletterForm } from "@/components/newsletter-form";
+import { TableOfContents } from "@/components/table-of-contents";
 
 interface BlogPageProps {
   params: Promise<{ slug: string }>;
@@ -108,8 +111,14 @@ export default async function BlogPage({ params }: BlogPageProps) {
       </header>
 
       <article className="prose prose-neutral dark:prose-invert prose-lg max-w-none">
+        <TableOfContents content={post.content} />
         <CustomMDX source={post.content} />
+        <ReadingProgress />
       </article>
+      {/* Newsletter Subscription */}
+      <div className="mx-auto max-w-md">
+        <NewsletterForm />
+      </div>
     </div>
   );
 }

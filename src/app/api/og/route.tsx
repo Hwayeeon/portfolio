@@ -140,11 +140,11 @@ export async function GET(request: NextRequest) {
         height: 630,
       }
     );
-  } catch (e: Error | unknown) {
-    const message = e instanceof Error ? e.message : "Unknown error";
-    console.log(`Failed to generate image: ${message}`);
-    return new Response(`Failed to generate the image`, {
-      status: 500,
-    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    if (process.env.NODE_ENV === "development") {
+      console.log(`Failed to generate image: ${message}`);
+    }
+    return new Response("Failed to generate image", { status: 500 });
   }
 }

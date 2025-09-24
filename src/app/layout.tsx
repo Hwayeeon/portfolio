@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/header";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Script from "next/script";
+import { PerformanceMonitor } from "@/components/performance-monitor";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -106,6 +106,25 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <link rel="dns-prefetch" href="//vercel.com" />
         {/* Preconnect to critical third parties */}
         <link rel="preconnect" href="https://vercel.com" crossOrigin="" />
+        {/* RSS and Feed Discovery */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Davidson Rafael's Blog RSS Feed"
+          href="/rss"
+        />
+        <link
+          rel="alternate"
+          type="application/atom+xml"
+          title="Davidson Rafael's Blog Atom Feed"
+          href="/atom"
+        />
+        <link
+          rel="alternate"
+          type="application/json"
+          title="Davidson Rafael's Blog JSON Feed"
+          href="/feed.json"
+        />
       </head>
       <body className="bg-background text-foreground min-h-screen antialiased">
         <Header />
@@ -117,17 +136,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         </div>
         <Analytics />
         <SpeedInsights />
-
-        {/* Performance monitoring in development */}
-        {process.env.NODE_ENV === "development" && (
-          <Script id="performance-monitor" strategy="afterInteractive">
-            {`
-              import('${process.env.NODE_ENV === "development" ? "/src/lib/performance" : ""}').then(module => {
-                // Performance monitoring loaded
-              }).catch(console.error);
-            `}
-          </Script>
-        )}
+        <PerformanceMonitor />
       </body>
     </html>
   );

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PostCard, PostCardSkeleton } from "./post-card";
+import { BlogSearch } from "./blog-search";
 import { getAllCategories, filterPostsByCategory, type EnhancedBlogPost } from "@/lib/blog-utils";
 import { cn } from "@/lib/utils";
 import { Filter, Grid, List } from "lucide-react";
@@ -11,6 +12,7 @@ interface PostListProps {
   posts: EnhancedBlogPost[];
   showFilter?: boolean;
   showLayoutToggle?: boolean;
+  showSearch?: boolean;
   initialLayout?: "default" | "square";
 }
 
@@ -18,6 +20,7 @@ export function PostList({
   posts,
   showFilter = true,
   showLayoutToggle = true,
+  showSearch = true,
   initialLayout = "default",
 }: PostListProps) {
   const router = useRouter();
@@ -26,6 +29,7 @@ export function PostList({
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [layout, setLayout] = useState<"default" | "square">(initialLayout);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchFilteredPosts, setSearchFilteredPosts] = useState<EnhancedBlogPost[]>(posts);
 
   // Get category from URL params on mount
   useEffect(() => {
@@ -40,10 +44,15 @@ export function PostList({
   // Get all unique categories
   const categories = useMemo(() => getAllCategories(posts), [posts]);
 
-  // Filter posts based on selected category
+  // Handle search results from BlogSearch component
+  const handleSearchResults = useCallback((filtered: EnhancedBlogPost[]) => {
+    setSearchFilteredPosts(filtered);
+  }, []);
+
+  // Filter posts based on selected category (from search results)
   const filteredPosts = useMemo(
-    () => filterPostsByCategory(posts, selectedCategory),
-    [posts, selectedCategory]
+    () => filterPostsByCategory(searchFilteredPosts, selectedCategory),
+    [searchFilteredPosts, selectedCategory]
   );
 
   // Handle category change
@@ -78,6 +87,11 @@ export function PostList({
 
   return (
     <div className="space-y-6">
+      {/* Search Bar */}
+      {showSearch && (
+        <BlogSearch posts={posts} onFilteredPosts={handleSearchResults} className="mb-6" />
+      )}
+
       {/* Filter and Layout Controls */}
       {(showFilter || showLayoutToggle) && (
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -98,10 +112,10 @@ export function PostList({
                       : "bg-muted text-muted-foreground hover:bg-muted/80"
                   )}
                 >
-                  All ({posts.length})
+                  All ({searchFilteredPosts.length})
                 </button>
                 {categories.map((category) => {
-                  const count = posts.filter((post) =>
+                  const count = searchFilteredPosts.filter((post) =>
                     post.metadata.categories?.includes(category)
                   ).length;
 
