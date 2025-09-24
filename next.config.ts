@@ -8,59 +8,49 @@ const nextConfig: NextConfig = {
   experimental: {
     mdxRs: true,
     optimizePackageImports: ["lucide-react", "date-fns"],
-    // Move serverComponentsExternalPackages to root level (deprecated in experimental)
+    // Turbopack configuration for Next.js 15.5.4+
+    turbo: {
+      rules: {
+        // Configure file loading rules for Turbopack
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
+        },
+        // Optimize CSS processing
+        "*.module.css": {
+          loaders: ["css-loader"],
+          as: "*.css",
+        },
+      },
+      resolveAlias: {
+        // Add path aliases for better import resolution
+        "@": "./src",
+        "@/components": "./src/components",
+        "@/lib": "./src/lib", 
+        "@/services": "./src/services",
+        "@/types": "./src/types",
+        "@/app": "./src/app",
+      },
+      resolveExtensions: [
+        ".mdx",
+        ".tsx", 
+        ".ts",
+        ".jsx",
+        ".js",
+        ".json",
+        ".css",
+      ],
+      loaders: {
+        // Optimize MDX loading performance
+        ".mdx": ["@mdx-js/loader"],
+      },
+    },
   },
 
-  // External packages that should not be bundled (moved from experimental)
+  // External packages that should not be bundled
   serverExternalPackages: ["shiki"],
 
-  // Turbopack configuration (moved from experimental.turbo)
-  turbo: {
-    rules: {
-      // Configure file loading rules for Turbopack
-      "*.svg": {
-        loaders: ["@svgr/webpack"],
-        as: "*.js",
-      },
-      // Optimize CSS processing
-      "*.module.css": {
-        loaders: ["css-loader"],
-        as: "*.css",
-      },
-    },
-    resolveAlias: {
-      // Add path aliases for better import resolution
-      "@": "./src",
-      "@/components": "./src/components",
-      "@/lib": "./src/lib", 
-      "@/services": "./src/services",
-      "@/types": "./src/types",
-      "@/app": "./src/app",
-    },
-    resolveExtensions: [
-      ".mdx",
-      ".tsx", 
-      ".ts",
-      ".jsx",
-      ".js",
-      ".json",
-      ".css",
-    ],
-    loaders: {
-      // Optimize MDX loading performance
-      ".mdx": ["@mdx-js/loader"],
-    },
-  },
-
   // Environment-specific configurations
-  ...(isDev && {
-    // Development-specific settings
-    devIndicators: {
-      appIsrStatus: true,
-      position: "bottom-right",
-    },
-  }),
-
   ...(isProduction && {
     // Production-specific settings
     compress: true,
