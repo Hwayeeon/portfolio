@@ -2,6 +2,11 @@ import fs from "fs";
 import path from "path";
 import readingTime from "reading-time";
 
+// Simple in-memory cache for blog posts
+let blogPostsCache: BlogPost[] | null = null;
+let cacheTimestamp: number | null = null;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
 export interface BlogMetadata {
   title: string;
   publishedAt: string;
@@ -115,8 +120,21 @@ function getMDXData(dir: string): BlogPost[] {
 }
 
 export function getBlogPosts(): BlogPost[] {
+  const now = Date.now();
+  
+  // Return cached posts if cache is fresh
+  if (blogPostsCache && cacheTimestamp && (now - cacheTimestamp) < CACHE_TTL) {
+    return blogPostsCache;
+  }
+  
+  // Load posts and update cache
   const postsDirectory = path.join(process.cwd(), "src", "app", "blog", "posts");
-  return getMDXData(postsDirectory);
+  const posts = getMDXData(postsDirectory);
+  
+  blogPostsCache = posts;
+  cacheTimestamp = now;
+  
+  return posts;
 }
 
 export function formatDate(date: string, includeRelative = false): string {
