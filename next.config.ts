@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   experimental: {
     mdxRs: true,
-    optimizePackageImports: ["lucide-react"],
+    optimizePackageImports: ["lucide-react", "date-fns"],
     turbo: {
       rules: {
         // Configure file loading rules for Turbopack
@@ -11,13 +11,20 @@ const nextConfig: NextConfig = {
           loaders: ["@svgr/webpack"],
           as: "*.js",
         },
+        // Optimize CSS processing
+        "*.module.css": {
+          loaders: ["css-loader"],
+          as: "*.css",
+        },
       },
       resolveAlias: {
         // Add path aliases for better import resolution
         "@": "./src",
         "@/components": "./src/components",
-        "@/lib": "./src/lib",
+        "@/lib": "./src/lib", 
         "@/services": "./src/services",
+        "@/types": "./src/types",
+        "@/app": "./src/app",
       },
       resolveExtensions: [
         ".mdx",
@@ -26,7 +33,12 @@ const nextConfig: NextConfig = {
         ".jsx",
         ".js",
         ".json",
+        ".css",
       ],
+      loaders: {
+        // Optimize MDX loading performance
+        ".mdx": ["@mdx-js/loader"],
+      },
     },
   },
 
