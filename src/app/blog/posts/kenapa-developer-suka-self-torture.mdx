@@ -1,0 +1,59 @@
+---
+title: "Framework Baru Tiap 3 Bulan? Kenapa Developer Suka Self-Torture"
+publishedAt: "2025-09-24"
+summary: "Kenapa tiap kali ada framework baru, developer buru-buru pindah, walau project lama belum selesai? Sebuah refleksi kritis tentang hype, FOMO, dan realita maintenance."
+categories: ["Opinion", "Frontend", "Backend"]
+tags: ["framework", "developer-life", "hype-cycle", "fomo"]
+thumbnailUrl: "https://images.unsplash.com/photo-1517433456452-f9633a875f6f?w=1200&h=630&fit=crop&q=80&auto=format"
+---
+
+> **TL;DR**  
+> Framework hype = FOMO.  
+> Biaya = technical debt + project mangkrak.  
+> Solusi = pilih bijak, jangan ikut-ikutan.
+
+Framework datang dan pergi lebih cepat daripada tren kopi susu di kampus. Baru aja lo nyaman sama satu stack, tiba-tiba muncul lagi framework yang katanya _lebih cepat, lebih ringan, lebih scalable._ Developer akhirnya sibuk belajar ulang, nge-_rewrite_ project, terus… setahun kemudian framework itu jadi fosil. Pertanyaannya: kenapa kita rela nyiksa diri sendiri?
+
+## Hype Cycle dan FOMO
+
+Teknologi itu kayak fashion. Ada yang timeless, ada yang musiman. Bedanya, di dunia software, musimnya jauh lebih pendek. Setiap 3–6 bulan, ada framework baru yang digadang-gadang sebagai _game changer._
+
+Banyak developer, terutama yang masih hijau, takut ketinggalan kereta. _Fear of Missing Out_ bikin mereka buru-buru pindah stack, walau project lama belum selesai.  
+Hasilnya? Repo jadi kuburan digital: dokumentasi seadanya, issue numpuk, technical debt makin gendut.
+
+## Biaya Nyata dari Ikut Hype
+
+Ngikutin framework baru tiap nongol itu bukan cuma soal belajar API baru. Ada harga yang harus dibayar:
+
+- **Project mangkrak.** Tim lo baru jungkir balik bikin auth system, eh minggu depan muncul framework baru yang katanya “lebih modern.” Migrasi setengah jadi, kode lama ditinggal.
+- **Maintenance nightmare.** Framework baru seringkali belum stabil. Dokumentasi tipis, bug masih liar, dan lo otomatis jadi QA gratisan.
+- **Technical debt.** Codebase berubah jadi Frankenstein: setengah pake framework lama, setengah pake yang baru. Hasilnya lebih sering tambal sulam daripada deliver fitur.
+
+## Beberapa Framework yang Pernah Jadi Tren tapi Meredup
+
+Kalau ngomong hype doang tanpa contoh, rasanya kayak teori konspirasi. Jadi mari kita inget beberapa framework yang sempet bikin dunia developer heboh, tapi akhirnya tenggelam atau berkurang pamornya:
+
+- **MeteorJS (2012–2016).** Dulu digadang-gadang sebagai masa depan aplikasi realtime. Semua orang excited karena “tinggal nulis JavaScript, backend-frontend langsung nyambung.” Nyatanya, komunitasnya kempes dan sekarang jarang banget dipakai di production. ([Hacker News](https://news.ycombinator.com/item?id=16782266&utm_source=chatgpt.com), [Medium](https://medium.com/@sachagreif/an-open-letter-to-the-new-owners-of-meteor-353d64780b20?utm_source=chatgpt.com), [Meteor Blog](https://blog.meteor.com/the-renaissance-of-meteor-js-d919db66dcc5?utm_source=chatgpt.com))
+- **AngularJS → Angular 2 (2016).** Salah satu drama besar di frontend. AngularJS populer gila, lalu Angular 2 keluar dengan arsitektur yang beda total. Banyak project mangkrak karena migrasinya kayak bikin ulang dari nol. ([Medium](https://medium.com/@codeautomation/migrating-from-angularjs-to-angular-challenges-and-best-practices-606508f96154?utm_source=chatgpt.com), [Agilie](https://agilie.com/blog/case-study-how-to-migrate-from-angularjs-to-angular?utm_source=chatgpt.com), [Medium](https://medium.com/@enoch3712/angular-js-is-dead-long-live-open-ai-a-migration-miracle-9904960297c5?utm_source=chatgpt.com))
+- **Backbone.js.** Sempet jadi primadona untuk strukturisasi JavaScript di era jQuery. Begitu React, Vue, dan kawan-kawan lahir, Backbone cepat jadi fosil. (Diskusi komunitas di [Stack Overflow](https://stackoverflow.com/questions/ask?utm_source=chatgpt.com) nunjukin penurunan pemakaian drastis.)
+- **Elm.** Bahasa fungsional yang pernah dielu-elukan sebagai masa depan frontend bebas bug. Tapi adopsinya terlalu kecil, komunitasnya stagnan. (Diskusi menarik di [Reddit](https://www.reddit.com/r/elm/?utm_source=chatgpt.com)).
+- **Svelte.** Framework yang sempet dipuja karena simpel dan “compiler-first.” Masih hidup, tapi hype-nya turun drastis setelah Next.js dan React tetap mendominasi. ([State of JS](https://2022.stateofjs.com/en-US/libraries/front-end-frameworks/?utm_source=chatgpt.com))
+
+Contoh-contoh ini nunjukin kalau nggak semua yang “revolusioner” beneran bertahan. Kadang framework yang katanya bakal “mengubah dunia” justru jadi catatan kaki di sejarah teknologi.
+
+## Jadi, Kapan Masuk Akal Ikut Framework Baru?
+
+Bukan berarti framework baru itu dosa. Ada kondisi di mana lompat ke yang baru memang logis:
+
+- **Framework lama sudah mati.** Maintainer cabut, update berhenti. Ya mau nggak mau.
+- **Ada value nyata.** Misalnya performa loncat signifikan, atau tooling bikin hidup dev lebih gampang.
+- **Komunitas matang.** Framework tanpa komunitas itu sama aja kayak beli motor tanpa bengkel. Begitu rusak, lo cuma bisa bengong.
+
+## Framework Bukan Tujuan, Cuma Alat
+
+Framework hanyalah obeng, bukan rumahnya. Lo nggak ganti obeng tiap bulan cuma karena ada “versi 2.0” yang lebih glossy. Kalau project masih sehat, tim produktif, dan user puas, buat apa pindah?
+
+Kadang yang bikin developer lebih dewasa bukan framework baru, tapi keberanian bilang:  
+_“yang lama masih cukup.”_
+
+Dan kalau dipikir-pikir, framework mungkin akan terus lahir dan mati. Tapi kode yang rapi, tim yang solid, dan produk yang kepake orang? Itu jauh lebih tahan lama dari tren sesaat.
