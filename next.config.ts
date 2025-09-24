@@ -7,7 +7,7 @@ const isProduction = process.env.NODE_ENV === "production";
 const nextConfig: NextConfig = {
   experimental: {
     mdxRs: true,
-    optimizePackageImports: ["lucide-react", "date-fns"]
+    optimizePackageImports: ["lucide-react", "date-fns"],
   },
 
   // External packages that should not be bundled
@@ -108,22 +108,14 @@ const nextConfig: NextConfig = {
       // Add path aliases for better import resolution
       "@": "./src",
       "@/components": "./src/components",
-      "@/lib": "./src/lib", 
+      "@/lib": "./src/lib",
       "@/services": "./src/services",
       "@/types": "./src/types",
       "@/app": "./src/app",
     },
 
-    resolveExtensions: [
-      ".mdx",
-      ".tsx", 
-      ".ts",
-      ".jsx",
-      ".js",
-      ".json",
-      ".css",
-    ],
-  }
+    resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".json", ".css"],
+  },
 };
 
 export default nextConfig;

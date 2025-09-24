@@ -12,7 +12,7 @@ export const devConfig = {
       fastRefresh: true,
       incrementalCompilation: true,
     },
-    
+
     // Cache configuration for faster rebuilds
     cache: {
       type: "filesystem" as const,
@@ -21,7 +21,7 @@ export const devConfig = {
         config: ["next.config.ts", "tsconfig.json", "package.json"],
       },
     },
-    
+
     // Asset optimization for development
     assets: {
       minimizeImages: false, // Disable in dev for speed
@@ -29,7 +29,7 @@ export const devConfig = {
       inlineCriticalCSS: false, // Keep separate for debugging
     },
   },
-  
+
   // Performance monitoring thresholds
   performance: {
     maxInitialRequests: 30,
@@ -37,7 +37,7 @@ export const devConfig = {
     minChunkSize: 20000,
     maxChunkSize: 244000,
   },
-  
+
   // Development server optimization
   devServer: {
     compress: true,
@@ -59,7 +59,7 @@ export const buildConfig = {
     usedExports: true,
     providedExports: true,
   },
-  
+
   // Bundle analysis configuration
   analyze: {
     enabled: process.env.ANALYZE === "true",
