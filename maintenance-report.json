@@ -1,0 +1,77 @@
+{
+  "scanned_at": "2025-09-24T10:17:36+07:00",
+  "languages": ["TypeScript", "JavaScript", "MDX", "CSS"],
+  "package_managers": ["npm"],
+  "updates": [
+    {
+      "manager": "npm",
+      "package": "next",
+      "from": "15.5.3",
+      "to": "15.5.4",
+      "commit": "b6fb17de8417229c2a774ce16dbe65b67e3f8d7a"
+    },
+    {
+      "manager": "npm",
+      "package": "eslint-config-next",
+      "from": "15.5.3",
+      "to": "15.5.4",
+      "commit": "b6fb17de8417229c2a774ce16dbe65b67e3f8d7a"
+    },
+    {
+      "manager": "npm",
+      "package": "react",
+      "from": "19.1.0",
+      "to": "19.1.1",
+      "commit": "b6fb17de8417229c2a774ce16dbe65b67e3f8d7a"
+    },
+    {
+      "manager": "npm",
+      "package": "react-dom",
+      "from": "19.1.0",
+      "to": "19.1.1",
+      "commit": "b6fb17de8417229c2a774ce16dbe65b67e3f8d7a"
+    }
+  ],
+  "refactors": [
+    {
+      "file": "src/app/not-found.tsx",
+      "summary": "Applied Prettier formatting",
+      "commit": "a6906354a6db1e9856d9dea2efd94ffd86d78424"
+    },
+    {
+      "file": "src/app/rss/route.ts",
+      "summary": "Applied Prettier formatting",
+      "commit": "a6906354a6db1e9856d9dea2efd94ffd86d78424"
+    },
+    {
+      "file": "src/components/error-boundary.tsx",
+      "summary": "Applied Prettier formatting",
+      "commit": "a6906354a6db1e9856d9dea2efd94ffd86d78424"
+    },
+    {
+      "file": "src/components/ui/button.tsx",
+      "summary": "Applied Prettier formatting", 
+      "commit": "a6906354a6db1e9856d9dea2efd94ffd86d78424"
+    },
+    {
+      "file": "src/lib/utils.ts",
+      "summary": "Applied Prettier formatting",
+      "commit": "a6906354a6db1e9856d9dea2efd94ffd86d78424"
+    },
+    {
+      "file": "src/types/modules.d.ts",
+      "summary": "Applied Prettier formatting",
+      "commit": "a6906354a6db1e9856d9dea2efd94ffd86d78424"
+    }
+  ],
+  "skipped": [
+    {
+      "reason": "Major version update requires investigation",
+      "details": "shiki: 1.29.2 → 3.13.0 - Breaking API changes possible, requires separate branch and testing"
+    },
+    {
+      "reason": "Major version update requires investigation", 
+      "details": "@types/node: 22.18.6 → 24.5.2 - Node.js type updates may require compatibility checks"
+    }
+  ]
+}
