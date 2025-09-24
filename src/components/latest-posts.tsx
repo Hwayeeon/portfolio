@@ -1,29 +1,22 @@
-import { getBlogPosts } from "@/app/blog/utils";
+import { BlogService } from "@/services/blog-service";
 import { PostCard } from "./post-card";
 import type { EnhancedBlogPost } from "@/lib/blog-utils";
 
-// Server Component - simple post list for home page (no filtering)
+// Server Component - optimized post list for home page
 export function LatestPosts({ limit = 3 }: { limit?: number }) {
-  const allBlogs = getBlogPosts();
+  const latestBlogs = BlogService.getLatestPosts(limit);
 
-  // Transform to EnhancedBlogPost format and limit results
-  const enhancedBlogs: EnhancedBlogPost[] = allBlogs
-    .sort((a, b) => {
-      const dateA = new Date(a.metadata.publishedAt);
-      const dateB = new Date(b.metadata.publishedAt);
-      return dateB.getTime() - dateA.getTime();
-    })
-    .slice(0, limit)
-    .map((blog) => ({
-      ...blog,
-      metadata: {
-        ...blog.metadata,
-        categories: blog.metadata.categories || [],
-        tags: blog.metadata.tags || [],
-        thumbnailUrl: blog.metadata.thumbnailUrl,
-        images: blog.metadata.images || [],
-      },
-    }));
+  // Transform to EnhancedBlogPost format
+  const enhancedBlogs: EnhancedBlogPost[] = latestBlogs.map((blog) => ({
+    ...blog,
+    metadata: {
+      ...blog.metadata,
+      categories: blog.metadata.categories || [],
+      tags: blog.metadata.tags || [],
+      thumbnailUrl: blog.metadata.thumbnailUrl,
+      images: blog.metadata.images || [],
+    },
+  }));
 
   if (enhancedBlogs.length === 0) {
     return (
