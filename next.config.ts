@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   },
   
   // Enhanced bundle optimization
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config, { dev }) => {
     // Production optimizations
     if (!dev) {
       // Optimize bundle splitting
