@@ -9,7 +9,11 @@ import { SimpleCache } from "@/lib/performance";
 // Service-level caches for different data types
 const postCache = new SimpleCache<BlogPost>(15 * 60 * 1000);
 const postsListCache = new SimpleCache<BlogPost[]>(15 * 60 * 1000);
-const statsCache = new SimpleCache<{ totalPosts: number; totalWords: number; averageReadingTime: number }>(15 * 60 * 1000);
+const statsCache = new SimpleCache<{
+  totalPosts: number;
+  totalWords: number;
+  averageReadingTime: number;
+}>(15 * 60 * 1000);
 
 export class BlogService {
   /**
@@ -25,7 +29,7 @@ export class BlogService {
   static getPostBySlug(slug: string): BlogPost | null {
     const cacheKey = `post-${slug}`;
     const cached = postCache.get(cacheKey);
-    
+
     if (cached) {
       return cached;
     }
@@ -35,7 +39,7 @@ export class BlogService {
       postCache.set(cacheKey, post);
       return post;
     }
-    
+
     return null;
   }
 
@@ -45,7 +49,7 @@ export class BlogService {
   static getLatestPosts(limit: number = 3): BlogPost[] {
     const cacheKey = `latest-${limit}`;
     const cached = postsListCache.get(cacheKey);
-    
+
     if (cached) {
       return cached;
     }
@@ -69,15 +73,13 @@ export class BlogService {
   static getPostsByCategory(category: string): BlogPost[] {
     const cacheKey = `category-${category}`;
     const cached = postsListCache.get(cacheKey);
-    
+
     if (cached) {
       return cached;
     }
 
     const allPosts = this.getAllPosts();
-    const filteredPosts = allPosts.filter(post => 
-      post.metadata.categories?.includes(category)
-    );
+    const filteredPosts = allPosts.filter((post) => post.metadata.categories?.includes(category));
 
     postsListCache.set(cacheKey, filteredPosts);
     return filteredPosts;
@@ -87,23 +89,24 @@ export class BlogService {
    * Get reading stats for all posts
    */
   static getReadingStats(): { totalPosts: number; totalWords: number; averageReadingTime: number } {
-    const cacheKey = 'reading-stats';
+    const cacheKey = "reading-stats";
     const cached = statsCache.get(cacheKey);
-    
+
     if (cached) {
       return cached;
     }
 
     const allPosts = this.getAllPosts();
     const totalWords = allPosts.reduce((sum, post) => sum + post.readingTime.words, 0);
-    const averageReadingTime = allPosts.length > 0 
-      ? Math.round(totalWords / allPosts.length / 200) // ~200 WPM average
-      : 0;
+    const averageReadingTime =
+      allPosts.length > 0
+        ? Math.round(totalWords / allPosts.length / 200) // ~200 WPM average
+        : 0;
 
     const stats = {
       totalPosts: allPosts.length,
       totalWords,
-      averageReadingTime
+      averageReadingTime,
     };
 
     statsCache.set(cacheKey, stats);
