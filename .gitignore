@@ -17,6 +17,10 @@
 /.next/
 /out/
 
+# turbopack
+.turbo
+*.turbo
+
 # production
 /build
 
