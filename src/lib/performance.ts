@@ -48,7 +48,7 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
  */
 export class SimpleCache<T> {
   private cache: Map<string, { value: T; expires: number }> = new Map();
-  
+
   constructor(private defaultTTL: number = 5 * 60 * 1000) {} // 5 minutes default
 
   set(key: string, value: T, ttl?: number): void {
@@ -59,19 +59,19 @@ export class SimpleCache<T> {
   get(key: string): T | null {
     const item = this.cache.get(key);
     if (!item) return null;
-    
+
     if (Date.now() > item.expires) {
       this.cache.delete(key);
       return null;
     }
-    
+
     return item.value;
   }
 
   clear(): void {
     this.cache.clear();
   }
-  
+
   size(): number {
     return this.cache.size;
   }
@@ -82,17 +82,17 @@ export class SimpleCache<T> {
  */
 export const perf = {
   mark: (name: string) => {
-    if (typeof performance !== 'undefined') {
+    if (typeof performance !== "undefined") {
       performance.mark(name);
     }
   },
-  
+
   measure: (name: string, startMark: string, endMark?: string) => {
-    if (typeof performance !== 'undefined') {
+    if (typeof performance !== "undefined") {
       performance.measure(name, startMark, endMark);
       const measure = performance.getEntriesByName(name)[0];
       return measure ? measure.duration : 0;
     }
     return 0;
-  }
+  },
 };
