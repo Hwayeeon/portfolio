@@ -8,55 +8,56 @@ const nextConfig: NextConfig = {
   experimental: {
     mdxRs: true,
     optimizePackageImports: ["lucide-react", "date-fns"],
-    // Enable Turbopack optimizations based on environment
-    turbo: {
-      rules: {
-        // Configure file loading rules for Turbopack
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
-        // Optimize CSS processing
-        "*.module.css": {
-          loaders: ["css-loader"],
-          as: "*.css",
-        },
+    // Move serverComponentsExternalPackages to root level (deprecated in experimental)
+  },
+
+  // External packages that should not be bundled (moved from experimental)
+  serverExternalPackages: ["shiki"],
+
+  // Turbopack configuration (moved from experimental.turbo)
+  turbo: {
+    rules: {
+      // Configure file loading rules for Turbopack
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
       },
-      resolveAlias: {
-        // Add path aliases for better import resolution
-        "@": "./src",
-        "@/components": "./src/components",
-        "@/lib": "./src/lib", 
-        "@/services": "./src/services",
-        "@/types": "./src/types",
-        "@/app": "./src/app",
-      },
-      resolveExtensions: [
-        ".mdx",
-        ".tsx", 
-        ".ts",
-        ".jsx",
-        ".js",
-        ".json",
-        ".css",
-      ],
-      loaders: {
-        // Optimize MDX loading performance
-        ".mdx": ["@mdx-js/loader"],
+      // Optimize CSS processing
+      "*.module.css": {
+        loaders: ["css-loader"],
+        as: "*.css",
       },
     },
-    // Performance optimizations
-    serverComponentsExternalPackages: ["shiki"],
-    optimizeServerReact: isProduction,
-    forceSwcTransforms: isProduction,
+    resolveAlias: {
+      // Add path aliases for better import resolution
+      "@": "./src",
+      "@/components": "./src/components",
+      "@/lib": "./src/lib", 
+      "@/services": "./src/services",
+      "@/types": "./src/types",
+      "@/app": "./src/app",
+    },
+    resolveExtensions: [
+      ".mdx",
+      ".tsx", 
+      ".ts",
+      ".jsx",
+      ".js",
+      ".json",
+      ".css",
+    ],
+    loaders: {
+      // Optimize MDX loading performance
+      ".mdx": ["@mdx-js/loader"],
+    },
   },
 
   // Environment-specific configurations
   ...(isDev && {
     // Development-specific settings
     devIndicators: {
-      buildActivity: true,
-      buildActivityPosition: "bottom-right",
+      appIsrStatus: true,
+      position: "bottom-right",
     },
   }),
 
