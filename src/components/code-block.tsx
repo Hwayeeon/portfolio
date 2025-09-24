@@ -24,7 +24,7 @@ const escapeHtml = (text: string): string => {
 // Language mapping for better performance (avoid repeated computations)
 const LANG_MAP: { [key: string]: string } = {
   js: "javascript",
-  ts: "typescript", 
+  ts: "typescript",
   py: "python",
   sh: "bash",
   yml: "yaml",
@@ -58,11 +58,14 @@ function CodeBlockComponent({ children, language = "text", filename, title }: Co
   }, [language]);
 
   // Memoize display information
-  const displayInfo = useMemo(() => ({
-    title: title || filename,
-    language: language && language !== "text" ? language.toLowerCase() : "",
-    displayName: LANG_DISPLAY_NAMES[resolvedLang] || resolvedLang.toUpperCase()
-  }), [title, filename, language, resolvedLang]);
+  const displayInfo = useMemo(
+    () => ({
+      title: title || filename,
+      language: language && language !== "text" ? language.toLowerCase() : "",
+      displayName: LANG_DISPLAY_NAMES[resolvedLang] || resolvedLang.toUpperCase(),
+    }),
+    [title, filename, language, resolvedLang]
+  );
 
   // Optimized copy function
   const copyToClipboard = useCallback(async () => {
@@ -80,7 +83,7 @@ function CodeBlockComponent({ children, language = "text", filename, title }: Co
 
     async function highlightCode() {
       if (!mounted) return;
-      
+
       try {
         setIsLoading(true);
 
