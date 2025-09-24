@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     mdxRs: true,
     optimizePackageImports: ["lucide-react"],
   },
-  
+
   // Enhanced bundle optimization
   webpack: (config, { dev }) => {
     // Production optimizations
@@ -14,38 +14,38 @@ const nextConfig: NextConfig = {
       config.optimization = {
         ...config.optimization,
         splitChunks: {
-          chunks: 'all',
+          chunks: "all",
           cacheGroups: {
             // Vendor chunk for third-party libraries
             vendor: {
               test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
+              name: "vendors",
               priority: 20,
-              chunks: 'all',
+              chunks: "all",
             },
             // Common chunk for shared components
             common: {
-              name: 'common',
+              name: "common",
               minChunks: 2,
               priority: 10,
-              chunks: 'all',
+              chunks: "all",
               enforce: true,
             },
             // Separate chunk for large libraries like Shiki
             shiki: {
               test: /[\\/]node_modules[\\/](shiki)[\\/]/,
-              name: 'shiki',
+              name: "shiki",
               priority: 30,
-              chunks: 'all',
+              chunks: "all",
             },
           },
         },
       };
     }
-    
+
     return config;
   },
-  
+
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
