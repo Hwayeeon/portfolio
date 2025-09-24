@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo, useCallback, useMemo } from "react";
 import { Check, Copy } from "lucide-react";
-import React from "react";
 
 interface CodeBlockProps {
   children: string;
@@ -11,7 +10,7 @@ interface CodeBlockProps {
   title?: string;
 }
 
-function escapeHtml(text: string): string {
+const escapeHtml = (text: string): string => {
   const map: { [key: string]: string } = {
     "&": "&amp;",
     "<": "&lt;",
@@ -20,32 +19,75 @@ function escapeHtml(text: string): string {
     "'": "&#039;",
   };
   return text.replace(/[&<>"']/g, (char) => map[char] || char);
-}
+};
 
-export function CodeBlock({ children, language = "text", filename, title }: CodeBlockProps) {
+// Language mapping for better performance (avoid repeated computations)
+const LANG_MAP: { [key: string]: string } = {
+  js: "javascript",
+  ts: "typescript", 
+  py: "python",
+  sh: "bash",
+  yml: "yaml",
+};
+
+const LANG_DISPLAY_NAMES: { [key: string]: string } = {
+  javascript: "JavaScript",
+  typescript: "TypeScript",
+  python: "Python",
+  html: "HTML",
+  css: "CSS",
+  bash: "Bash",
+  shell: "Shell",
+  sql: "SQL",
+  json: "JSON",
+  yaml: "YAML",
+  markdown: "Markdown",
+  tsx: "TSX",
+  jsx: "JSX",
+};
+
+function CodeBlockComponent({ children, language = "text", filename, title }: CodeBlockProps) {
   const [isCopied, setIsCopied] = useState(false);
   const [highlightedCode, setHighlightedCode] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
 
+  // Memoize resolved language to avoid recomputation
+  const resolvedLang = useMemo(() => {
+    const normalizedLang = language.toLowerCase().trim();
+    return LANG_MAP[normalizedLang] || normalizedLang;
+  }, [language]);
+
+  // Memoize display information
+  const displayInfo = useMemo(() => ({
+    title: title || filename,
+    language: language && language !== "text" ? language.toLowerCase() : "",
+    displayName: LANG_DISPLAY_NAMES[resolvedLang] || resolvedLang.toUpperCase()
+  }), [title, filename, language, resolvedLang]);
+
+  // Optimized copy function
+  const copyToClipboard = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(children);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (error) {
+      console.error("Failed to copy:", error);
+    }
+  }, [children]);
+
   useEffect(() => {
+    let mounted = true;
+
     async function highlightCode() {
+      if (!mounted) return;
+      
       try {
         setIsLoading(true);
 
-        // Normalize language name
-        const normalizedLang = language.toLowerCase().trim();
-        const langMap: { [key: string]: string } = {
-          js: "javascript",
-          ts: "typescript",
-          py: "python",
-          sh: "bash",
-          yml: "yaml",
-        };
-
-        const resolvedLang = langMap[normalizedLang] || normalizedLang;
-
         // Dynamically import shiki for better code splitting
         const { codeToHtml } = await import("shiki");
+
+        if (!mounted) return;
 
         const html = await codeToHtml(children, {
           lang: resolvedLang,
@@ -57,68 +99,44 @@ export function CodeBlock({ children, language = "text", filename, title }: Code
           cssVariablePrefix: "--shiki-",
         });
 
-        setHighlightedCode(html);
+        if (mounted) {
+          setHighlightedCode(html);
+        }
       } catch (error) {
         console.error("Error highlighting code:", error);
-        // Fallback to escaped HTML
-        setHighlightedCode(`<pre><code>${escapeHtml(children)}</code></pre>`);
+        if (mounted) {
+          // Fallback to escaped HTML
+          setHighlightedCode(`<pre><code>${escapeHtml(children)}</code></pre>`);
+        }
       } finally {
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     }
 
     highlightCode();
-  }, [children, language]);
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(children);
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
-    } catch (error) {
-      console.error("Failed to copy:", error);
-    }
-  };
-
-  const displayTitle = title || filename;
-  const displayLanguage = language && language !== "text" ? language.toLowerCase() : "";
-
-  // Better language display names
-  const languageDisplayNames: { [key: string]: string } = {
-    javascript: "JavaScript",
-    typescript: "TypeScript",
-    python: "Python",
-    html: "HTML",
-    css: "CSS",
-    bash: "Bash",
-    shell: "Shell",
-    sql: "SQL",
-    json: "JSON",
-    yaml: "YAML",
-    markdown: "Markdown",
-    tsx: "TSX",
-    jsx: "JSX",
-  };
-
-  const prettyLanguage = displayLanguage
-    ? languageDisplayNames[displayLanguage] || displayLanguage.toUpperCase()
-    : "";
+    return () => {
+      mounted = false;
+    };
+  }, [children, resolvedLang]);
 
   if (isLoading) {
     return (
       <div className="group relative my-6">
-        {displayTitle && (
+        {displayInfo.title && (
           <div className="bg-muted border-border flex items-center justify-between rounded-t-lg border px-4 py-2">
-            <span className="text-muted-foreground text-sm font-medium">{displayTitle}</span>
-            {prettyLanguage && (
+            <span className="text-muted-foreground text-sm font-medium">{displayInfo.title}</span>
+            {displayInfo.displayName && (
               <span className="text-muted-foreground font-mono text-xs tracking-wide uppercase">
-                {prettyLanguage}
+                {displayInfo.displayName}
               </span>
             )}
           </div>
         )}
         <div
-          className={`bg-[#0d1117] ${displayTitle ? "rounded-t-none" : "rounded-lg"} border-border border p-4`}
+          className={`bg-[#0d1117] ${displayInfo.title ? "rounded-t-none" : "rounded-lg"} border-border border p-4`}
         >
           <div className="animate-pulse">
             <div className="mb-2 h-4 w-3/4 rounded bg-gray-600"></div>
@@ -132,22 +150,22 @@ export function CodeBlock({ children, language = "text", filename, title }: Code
 
   return (
     <div className="group relative my-6">
-      {displayTitle && (
+      {displayInfo.title && (
         <div className="bg-muted border-border flex items-center justify-between rounded-t-lg border px-4 py-2">
-          <span className="text-muted-foreground text-sm font-medium">{displayTitle}</span>
-          {prettyLanguage && (
+          <span className="text-muted-foreground text-sm font-medium">{displayInfo.title}</span>
+          {displayInfo.displayName && (
             <span className="text-muted-foreground font-mono text-xs tracking-wide uppercase">
-              {prettyLanguage}
+              {displayInfo.displayName}
             </span>
           )}
         </div>
       )}
 
       {/* Show language badge if no title but there's a language */}
-      {!displayTitle && prettyLanguage && (
+      {!displayInfo.title && displayInfo.displayName && (
         <div className="bg-muted border-border absolute top-3 left-3 z-10 rounded border px-2 py-1">
           <span className="text-muted-foreground font-mono text-xs tracking-wide uppercase">
-            {prettyLanguage}
+            {displayInfo.displayName}
           </span>
         </div>
       )}
@@ -166,10 +184,13 @@ export function CodeBlock({ children, language = "text", filename, title }: Code
         </button>
 
         <div
-          className={`${displayTitle ? "rounded-t-none" : "rounded-lg"} border-border overflow-hidden border [&>pre]:!m-0 [&>pre]:!rounded-none [&>pre]:!border-none [&>pre]:!bg-[#0d1117]`}
+          className={`${displayInfo.title ? "rounded-t-none" : "rounded-lg"} border-border overflow-hidden border [&>pre]:!m-0 [&>pre]:!rounded-none [&>pre]:!border-none [&>pre]:!bg-[#0d1117]`}
           dangerouslySetInnerHTML={{ __html: highlightedCode }}
         />
       </div>
     </div>
   );
 }
+
+// Export the memoized component for better performance
+export const CodeBlock = memo(CodeBlockComponent);

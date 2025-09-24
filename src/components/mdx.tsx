@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
+import React from "react";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import { CodeBlock } from "@/components/code-block";
-import React from "react";
 
 // TypeScript interfaces
 interface TableData {
