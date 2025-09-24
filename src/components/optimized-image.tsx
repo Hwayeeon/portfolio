@@ -1,9 +1,9 @@
 import NextImage, { ImageProps } from "next/image";
 
-interface OptimizedImageProps extends Omit<ImageProps, 'quality' | 'loading'> {
+interface OptimizedImageProps extends Omit<ImageProps, "quality" | "loading"> {
   priority?: boolean;
   quality?: number;
-  loading?: 'lazy' | 'eager';
+  loading?: "lazy" | "eager";
 }
 
 /**
@@ -12,24 +12,24 @@ interface OptimizedImageProps extends Omit<ImageProps, 'quality' | 'loading'> {
  * - Optimized quality settings for different contexts
  * - Better loading strategies
  */
-export function OptimizedImage({ 
-  quality = 85, 
-  loading = 'lazy',
+export function OptimizedImage({
+  quality = 85,
+  loading = "lazy",
   priority = false,
   className = "",
   alt,
-  ...props 
+  ...props
 }: OptimizedImageProps) {
   // Adjust quality based on image size and context
-  const width = typeof props.width === 'number' ? props.width : parseInt(String(props.width || 0));
+  const width = typeof props.width === "number" ? props.width : parseInt(String(props.width || 0));
   const adjustedQuality = width > 800 ? Math.min(quality, 75) : quality;
-  
+
   return (
     <NextImage
       {...props}
       alt={alt}
       quality={adjustedQuality}
-      loading={priority ? 'eager' : loading}
+      loading={priority ? "eager" : loading}
       priority={priority}
       className={`transition-opacity duration-300 ${className}`}
       placeholder="blur"
@@ -41,12 +41,12 @@ export function OptimizedImage({
 /**
  * Blog thumbnail component with optimized settings for blog cards
  */
-export function BlogThumbnail({ 
-  src, 
-  alt, 
+export function BlogThumbnail({
+  src,
+  alt,
   priority = false,
-  ...props 
-}: Omit<OptimizedImageProps, 'width' | 'height'>) {
+  ...props
+}: Omit<OptimizedImageProps, "width" | "height">) {
   return (
     <OptimizedImage
       src={src}
@@ -55,7 +55,7 @@ export function BlogThumbnail({
       height={300}
       quality={80}
       priority={priority}
-      className="aspect-video object-cover rounded-lg"
+      className="aspect-video rounded-lg object-cover"
       {...props}
     />
   );
@@ -64,12 +64,12 @@ export function BlogThumbnail({
 /**
  * Avatar component with optimized settings for profile images
  */
-export function Avatar({ 
-  src, 
-  alt, 
+export function Avatar({
+  src,
+  alt,
   size = 40,
-  ...props 
-}: Omit<OptimizedImageProps, 'width' | 'height'> & { size?: number }) {
+  ...props
+}: Omit<OptimizedImageProps, "width" | "height"> & { size?: number }) {
   return (
     <OptimizedImage
       src={src}
