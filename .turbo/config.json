@@ -1,0 +1,13 @@
+{
+  "teamId": null,
+  "apiUrl": "https://vercel.com/api",
+  "loginUrl": "https://vercel.com",
+  "remoteCache": {
+    "enabled": false
+  },
+  "caching": {
+    "enabled": true,
+    "skipCloudCache": true,
+    "skipFileSystemCache": false
+  }
+}
