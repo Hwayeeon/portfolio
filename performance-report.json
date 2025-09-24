@@ -22,14 +22,14 @@
       "build_time_ms": 26600,
       "bundle_analysis": {
         "homepage_kb": 126,
-        "blog_page_kb": 144, 
+        "blog_page_kb": 144,
         "blog_post_kb": 127,
         "shared_js_kb": 130
       },
       "improvements": {
         "build_time_improvement_ms": 2900,
         "code_quality_score": "95%",
-        "maintainability_score": "90%" 
+        "maintainability_score": "90%"
       }
     }
   },
@@ -44,7 +44,7 @@
       }
     },
     {
-      "commit": "39f0ed5", 
+      "commit": "39f0ed5",
       "type": "architecture",
       "impact": {
         "service_layer_added": true,
@@ -54,7 +54,7 @@
     },
     {
       "commit": "4da24df",
-      "type": "configuration", 
+      "type": "configuration",
       "impact": {
         "webpack_optimization": true,
         "bundle_splitting": "enhanced",
