@@ -4,13 +4,19 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:fast": "TURBOPACK=1 next dev --turbopack --port 3000",
+    "dev:debug": "NODE_OPTIONS='--inspect' next dev --turbopack",
     "build": "next build --turbopack",
+    "build:analyze": "ANALYZE=true next build --turbopack",
+    "build:debug": "NEXT_DEBUG_BUILD=1 next build --turbopack",
     "start": "next start",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "type-check": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.{ts,tsx,md,mdx}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,md,mdx}\""
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,md,mdx}\"",
+    "clean": "rm -rf .next .turbo node_modules/.cache",
+    "postinstall": "next build --turbopack || true"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
