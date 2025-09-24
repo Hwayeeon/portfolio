@@ -46,7 +46,7 @@ export class BlogService {
   /**
    * Get latest posts with efficient slicing
    */
-  static getLatestPosts(limit: number = 3): BlogPost[] {
+  static getLatestPosts(limit: number = 4): BlogPost[] {
     const cacheKey = `latest-${limit}`;
     const cached = postsListCache.get(cacheKey);
 
