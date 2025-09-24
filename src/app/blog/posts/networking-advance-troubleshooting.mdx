@@ -1,0 +1,95 @@
+---
+title: "Networking Advance: Troubleshooting di Dunia Nyata"
+publishedAt: "2025-09-24"
+summary: "Langkah-langkah sistematis, tools wajib (dig, ss, tcpdump), pola umum masalah, dan checklist untuk menyelesaikan isu jaringan dengan cepat."
+categories: ["Networking", "Infrastructure", "Troubleshooting"]
+tags: ["networking", "troubleshooting", "tcpdump", "dig", "ss", "tls", "dns", "firewall"]
+thumbnailUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=630&fit=crop&q=80&auto=format"
+---
+
+Kalau jaringan mulai rewel, jangan panik. Pakai pendekatan sistematis. Artikel ini merangkum cara berpikir, urutan pengecekan, dan alat yang biasa dipakai SRE/DevOps saat produksi lagi drama.
+
+<Figure
+  src="https://images.unsplash.com/photo-1520975916090-3105956dac38?w=1200&h=630&fit=crop&q=80&auto=format"
+  alt="Diagram alur troubleshooting jaringan"
+  width={1200}
+  height={630}
+/>
+
+## Mindset: Hipotesis → Bukti → Aksi
+
+- Reproduksi gejala, minimalkan variabel
+- Kumpulkan bukti: logs, metrik, pcap
+- Uji hipotesis satu per satu; rollback jika perlu
+- Dokumentasikan hasil untuk tim
+
+## Urutan Pengecekan (Layer-by-Layer)
+
+1. Host & Resource
+
+- CPU, RAM, disk (penuh?)
+- Service jalan? `systemctl status <svc>`
+
+2. Network Stack
+
+- IP/route benar? `ip a`, `ip r`
+- Port listen? `ss -tulpen | grep LISTEN`
+
+3. DNS
+
+- Resolusi benar? `dig +trace api.example.com`
+- TTL dan caching konsisten?
+
+4. TLS
+
+- Sertifikat valid? `openssl s_client -connect example.com:443 -servername example.com | openssl x509 -noout -dates`
+- Chain lengkap? SNI benar?
+
+5. Firewall & NAT
+
+- Rule drop? `iptables -S` / ufw / security group cloud
+- NAT/port forwarding sesuai?
+
+6. Aplikasi
+
+- Timeout, retry, backoff
+- Circuit breaker, pool koneksi
+
+## Tools Wajib
+
+- `dig`, `nslookup` — DNS debugging
+- `ss`, `netstat` — socket & port
+- `curl` — HTTP request cepat (header, TLS)
+- `tcpdump`/`tshark` — capture paket untuk analisis mendalam
+- `traceroute`, `mtr` — jalur routing dan loss
+
+```bash
+# Lihat koneksi TCP ke port 443
+ss -tan dst :443 | head -20
+
+# Trace DNS penuh
+dig +trace api.example.com
+
+# Capture HTTP singkat (butuh sudo)
+sudo tcpdump -i any port 443 -c 50 -w sample.pcap
+```
+
+## Pola Masalah Umum
+
+- DNS drift: sebagian region resolve ke IP berbeda → periksa konfigurasi authoritative & health checks
+- TLS handshake gagal: sertifikat kadaluarsa, SNI salah, cipher tidak cocok
+- Port tertutup: firewall/SG salah aturan
+- Asymmetric routing: paket pergi via jalur A, balik via B → cek route dan NAT
+- Slow start: window TCP, congestion control → periksa metrik dan tuning kernel
+
+## Checklist Produksi (Minimum)
+
+- Monitoring metrik (CPU, RAM, disk, latency, error rate)
+- Alerting yang actionable (bukan noise)
+- Dashboard DNS/TLS expiry
+- Runbook untuk insiden umum (restart service, rotate cert)
+- Postmortem tanpa menyalahkan individu
+
+## Penutup
+
+Troubleshooting jaringan jadi jauh lebih ringan kalau kamu punya urutan, alat, dan kebiasaan dokumentasi. Jangan lompat ke asumsi—buktikan lewat data. Seiring waktu, kamu bakal makin cepat menemukan akar masalah dan memperbaiki secara permanen.

@@ -1,0 +1,103 @@
+---
+title: "Networking 101 untuk Developer: Biar Nggak Pusing Soal IP, DNS, dan Ports"
+publishedAt: "2025-09-23"
+summary: "Fondasi jaringan yang wajib dipahami developer: model OSI/TCP-IP, IP & subnet, TCP vs UDP, DNS, HTTP/TLS, NAT, plus tips dan alat cek cepat."
+categories: ["Networking", "Infrastructure", "Basics"]
+tags: ["networking", "osi", "tcp", "udp", "dns", "http", "tls", "subnet", "nat"]
+thumbnailUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=630&fit=crop&q=80&auto=format"
+---
+
+Pernah deploy app, tapi user bilang “kok nggak bisa diakses?” Lalu kamu bingung: ini masalah DNS, firewall, atau server yang mati? Tenang—networking itu bukan ilmu sihir. Dengan gambaran besar yang benar, kamu bisa cepat mengisolasi masalah.
+
+Bayangin jaringan seperti jalan tol digital. Paket data adalah mobil, alamat IP seperti alamat rumah, port seperti nomor gerbang, dan DNS seperti peta digital yang nunjukin rute.
+
+<Figure
+  src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?w=1200&h=630&fit=crop&q=80&auto=format"
+  alt="Ilustrasi jalur data di jaringan"
+  width={1200}
+  height={630}
+/>
+
+## Apa itu Networking (Singkat Tapi Nendang)
+
+Dua model acuan:
+
+- OSI (7 layer): Physical, Data Link, Network, Transport, Session, Presentation, Application.
+- TCP/IP (4 layer): Link, Internet, Transport, Application (lebih praktis dipakai sehari-hari).
+
+<Table
+  data={{
+    headers: ["Layer (OSI/TCP-IP)", "Contoh", "Catatan"],
+    rows: [
+      ["Application", "HTTP, DNS, TLS, gRPC", "Di sinilah app kamu bicara"],
+      ["Transport", "TCP, UDP", "TCP = andal; UDP = cepat (tanpa jaminan)"],
+      ["Internet", "IP, ICMP", "Routing paket lewat IP address"],
+      ["Link", "Ethernet, Wi-Fi", "Kabel/gelombang yang bawa bit"],
+    ],
+  }}
+/>
+
+## Kenapa Developer Perlu Paham Ini?
+
+- Debug cepat saat layanan tidak bisa diakses (apakah DNS? port? firewall?).
+- Desain service yang robust (timeout, retry, backoff).
+- Optimasi performa dan keamanan (TLS, HTTP/2, caching).
+
+## Bagaimana Memulai: Komponen Kunci
+
+### 1) IP Address & Subnet (CIDR)
+
+- IPv4 (contoh: `192.168.1.10`), subnet `/24` ≈ 256 alamat (0–255, usable 254).
+- CIDR menentukan ukuran jaringan: `/16` besar, `/24` standar LAN, `/32` satu host.
+- Private vs Public: `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16` itu private.
+
+### 2) Port
+
+- Port identik dengan “pintu” layanan di mesin: HTTP 80, HTTPS 443, SSH 22, DNS 53.
+- Satu IP bisa layani banyak service via port yang berbeda.
+
+### 3) TCP vs UDP
+
+- TCP: koneksi, reliabilitas, urutan. Cocok untuk web/API.
+- UDP: tanpa koneksi; latency rendah. Cocok untuk video/gaming/DNS.
+
+### 4) DNS (Nama → Alamat)
+
+- Proses: browser tanya resolver → resolver tanya root → TLD → authoritative → dapat IP → simpan cache.
+- Record umum: `A` (IPv4), `AAAA` (IPv6), `CNAME` (alias), `MX` (email), `TXT` (verifikasi).
+
+### 5) HTTP dan TLS (Keamanan)
+
+- HTTP/1.1: koneksi per beberapa request; HTTP/2: multiplexing; HTTP/3: di atas QUIC/UDP.
+- TLS: handshake, sertifikat, enkripsi channel. Pastikan sertifikat valid & non-expired.
+
+### 6) NAT & Firewall
+
+- NAT: menerjemahkan IP private ke public (rumah/kantor/cloud VPC).
+- Firewall: aturan allow/deny port/protokol/sumber. Pastikan port yang dibutuhkan terbuka.
+
+## Contoh Praktis (Sketsa)
+
+- Hitung subnet cepat: `10.0.0.0/24` → 256 alamat total; host usable = 254.
+- Cek port terbuka (server): `ss -tulpen | grep LISTEN`.
+- Cek DNS: `dig +short api.example.com`.
+- Cek konektivitas: `curl -I https://example.com` atau `ping -c 3 example.com`.
+
+```bash
+# Cek siapa yang dengar di port 443
+ss -tulpen | grep :443
+
+# Cek HTTP headers
+curl -I https://example.com
+```
+
+## Kesalahan Umum (dan Cara Menghindarinya)
+
+- Mengira masalah app, padahal DNS belum propagate → gunakan `dig` untuk verifikasi.
+- Lupa buka firewall atau security group → cek rules untuk 80/443/22.
+- Sertifikat kadaluarsa → automasi renew (contoh: certbot) dan monitoring expiry.
+- Timeouts terlalu agresif → gunakan retry dengan backoff.
+
+## Penutup
+
+Networking itu fondasi. Kuasai konsep inti (IP, port, TCP/UDP, DNS, HTTP/TLS, NAT), siapkan alat cek cepat, dan kamu akan jauh lebih tenang saat deploy. Fokus di gambaran besar dulu; detail teknis bisa menyusul sesuai kebutuhan.
