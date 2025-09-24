@@ -7,44 +7,7 @@ const isProduction = process.env.NODE_ENV === "production";
 const nextConfig: NextConfig = {
   experimental: {
     mdxRs: true,
-    optimizePackageImports: ["lucide-react", "date-fns"],
-    // Turbopack configuration for Next.js 15.5.4+
-    turbo: {
-      rules: {
-        // Configure file loading rules for Turbopack
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
-        // Optimize CSS processing
-        "*.module.css": {
-          loaders: ["css-loader"],
-          as: "*.css",
-        },
-      },
-      resolveAlias: {
-        // Add path aliases for better import resolution
-        "@": "./src",
-        "@/components": "./src/components",
-        "@/lib": "./src/lib", 
-        "@/services": "./src/services",
-        "@/types": "./src/types",
-        "@/app": "./src/app",
-      },
-      resolveExtensions: [
-        ".mdx",
-        ".tsx", 
-        ".ts",
-        ".jsx",
-        ".js",
-        ".json",
-        ".css",
-      ],
-      loaders: {
-        // Optimize MDX loading performance
-        ".mdx": ["@mdx-js/loader"],
-      },
-    },
+    optimizePackageImports: ["lucide-react", "date-fns"]
   },
 
   // External packages that should not be bundled
@@ -85,6 +48,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
   async headers() {
     return [
       {
@@ -110,6 +74,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
   async redirects() {
     return [
       {
@@ -119,6 +84,46 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  turbopack: {
+    rules: {
+      // Configure file loading rules for Turbopack
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+      // Optimize CSS processing
+      "*.module.css": {
+        loaders: ["css-loader"],
+        as: "*.css",
+      },
+    },
+
+    resolveAlias: {
+      // Add path aliases for better import resolution
+      "@": "./src",
+      "@/components": "./src/components",
+      "@/lib": "./src/lib", 
+      "@/services": "./src/services",
+      "@/types": "./src/types",
+      "@/app": "./src/app",
+    },
+
+    resolveExtensions: [
+      ".mdx",
+      ".tsx", 
+      ".ts",
+      ".jsx",
+      ".js",
+      ".json",
+      ".css",
+    ],
+
+    loaders: {
+      // Optimize MDX loading performance
+      ".mdx": ["@mdx-js/loader"],
+    }
+  }
 };
 
 export default nextConfig;
