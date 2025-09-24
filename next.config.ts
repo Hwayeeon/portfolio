@@ -1,9 +1,14 @@
 import type { NextConfig } from "next";
 
+// Environment-based configuration
+const isDev = process.env.NODE_ENV === "development";
+const isProduction = process.env.NODE_ENV === "production";
+
 const nextConfig: NextConfig = {
   experimental: {
     mdxRs: true,
     optimizePackageImports: ["lucide-react", "date-fns"],
+    // Enable Turbopack optimizations based on environment
     turbo: {
       rules: {
         // Configure file loading rules for Turbopack
@@ -40,7 +45,26 @@ const nextConfig: NextConfig = {
         ".mdx": ["@mdx-js/loader"],
       },
     },
+    // Performance optimizations
+    serverComponentsExternalPackages: ["shiki"],
+    optimizeServerReact: isProduction,
+    forceSwcTransforms: isProduction,
   },
+
+  // Environment-specific configurations
+  ...(isDev && {
+    // Development-specific settings
+    devIndicators: {
+      buildActivity: true,
+      buildActivityPosition: "bottom-right",
+    },
+  }),
+
+  ...(isProduction && {
+    // Production-specific settings
+    compress: true,
+    poweredByHeader: false,
+  }),
 
   images: {
     formats: ["image/avif", "image/webp"],
