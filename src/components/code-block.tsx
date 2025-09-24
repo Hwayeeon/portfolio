@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Check, Copy } from "lucide-react";
-import { codeToHtml } from "shiki";
 import React from "react";
 
 interface CodeBlockProps {
@@ -48,28 +47,35 @@ export function CodeBlock({
           py: "python",
           sh: "bash",
           yml: "yaml",
-          md: "markdown",
         };
-        const finalLang = langMap[normalizedLang] || normalizedLang || "text";
 
-        const html = await codeToHtml(children.trim(), {
-          lang: finalLang,
-          theme: "github-dark",
+        const resolvedLang = langMap[normalizedLang] || normalizedLang;
+
+        // Dynamically import shiki for better code splitting
+        const { codeToHtml } = await import("shiki");
+        
+        const html = await codeToHtml(children, {
+          lang: resolvedLang,
+          themes: {
+            light: "github-light",
+            dark: "github-dark",
+          },
+          defaultColor: false,
+          cssVariablePrefix: "--shiki-",
         });
+
         setHighlightedCode(html);
       } catch (error) {
         console.error("Error highlighting code:", error);
-        // Fallback with better styling
-        setHighlightedCode(
-          `<pre class="bg-[#0d1117] text-[#e6edf3] p-4 rounded overflow-x-auto border border-gray-700"><code class="font-mono text-sm leading-relaxed">${escapeHtml(children)}</code></pre>`
-        );
+        // Fallback to escaped HTML
+        setHighlightedCode(`<pre><code>${escapeHtml(children)}</code></pre>`);
       } finally {
         setIsLoading(false);
       }
     }
 
     highlightCode();
-  }, [children, language, showLineNumbers]);
+  }, [children, language]);
 
   const copyToClipboard = async () => {
     try {
