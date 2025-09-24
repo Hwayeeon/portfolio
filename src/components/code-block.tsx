@@ -8,7 +8,6 @@ interface CodeBlockProps {
   children: string;
   language?: string;
   filename?: string;
-  showLineNumbers?: boolean;
   title?: string;
 }
 
@@ -28,7 +27,6 @@ export function CodeBlock({
   language = "text",
   filename,
   title,
-  showLineNumbers = false,
 }: CodeBlockProps) {
   const [isCopied, setIsCopied] = useState(false);
   const [highlightedCode, setHighlightedCode] = useState<string>("");
