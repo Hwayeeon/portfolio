@@ -35,7 +35,7 @@ export function generatePostMetadata({
         },
       ],
       publishedTime: post.metadata.publishedAt,
-      authors: ["Your Name"],
+      authors: ["Davidson Rafael"],
       tags: post.metadata.tags || [],
     },
     twitter: {
@@ -43,8 +43,8 @@ export function generatePostMetadata({
       title: post.metadata.title,
       description: post.metadata.summary,
       images: [imageUrl],
-      creator: "@yourusername",
-      site: "@yourusername",
+      creator: "@davidsonrafael_",
+      site: "@davidsonrafael_",
     },
     alternates: {
       canonical: url,
