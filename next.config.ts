@@ -3,22 +3,17 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   experimental: {
     mdxRs: true,
-    optimizePackageImports: ["lucide-react", "@radix-ui/react-slot"],
-    turbo: {
-      rules: {
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
-      },
-    },
+    optimizePackageImports: ["lucide-react", "@radix-ui/react-slot"]
   },
+
   // Bundle optimization
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
+
   // Enable compression
   compress: true,
+
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -49,6 +44,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
   async headers() {
     return [
       {
@@ -100,6 +96,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
   async redirects() {
     return [
       {
@@ -109,6 +106,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  turbopack: {
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    }
+  }
 };
 
 export default nextConfig;
