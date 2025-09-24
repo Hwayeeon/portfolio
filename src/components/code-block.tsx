@@ -22,12 +22,7 @@ function escapeHtml(text: string): string {
   return text.replace(/[&<>"']/g, (char) => map[char] || char);
 }
 
-export function CodeBlock({
-  children,
-  language = "text",
-  filename,
-  title,
-}: CodeBlockProps) {
+export function CodeBlock({ children, language = "text", filename, title }: CodeBlockProps) {
   const [isCopied, setIsCopied] = useState(false);
   const [highlightedCode, setHighlightedCode] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
@@ -51,7 +46,7 @@ export function CodeBlock({
 
         // Dynamically import shiki for better code splitting
         const { codeToHtml } = await import("shiki");
-        
+
         const html = await codeToHtml(children, {
           lang: resolvedLang,
           themes: {
