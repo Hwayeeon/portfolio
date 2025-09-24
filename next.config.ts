@@ -97,6 +97,11 @@ const nextConfig: NextConfig = {
         loaders: ["css-loader"],
         as: "*.css",
       },
+      // Optimize MDX loading performance
+      "*.mdx": {
+        loaders: ["@mdx-js/loader"],
+        as: "*.js",
+      },
     },
 
     resolveAlias: {
@@ -118,11 +123,6 @@ const nextConfig: NextConfig = {
       ".json",
       ".css",
     ],
-
-    loaders: {
-      // Optimize MDX loading performance
-      ".mdx": ["@mdx-js/loader"],
-    }
   }
 };
 
