@@ -5,7 +5,7 @@ import { SimpleCache, perf } from "@/lib/performance";
 
 // Enhanced cache implementation using the new performance utilities
 const blogCache = new SimpleCache<BlogPost[]>(10 * 60 * 1000); // 10 minutes cache
-const BLOG_CACHE_KEY = 'blog-posts';
+const BLOG_CACHE_KEY = "blog-posts";
 
 export interface BlogMetadata {
   title: string;
@@ -120,25 +120,25 @@ function getMDXData(dir: string): BlogPost[] {
 }
 
 export function getBlogPosts(): BlogPost[] {
-  perf.mark('getBlogPosts-start');
-  
+  perf.mark("getBlogPosts-start");
+
   // Check cache first
   const cached = blogCache.get(BLOG_CACHE_KEY);
   if (cached) {
-    perf.mark('getBlogPosts-end');
-    perf.measure('getBlogPosts-cached', 'getBlogPosts-start', 'getBlogPosts-end');
+    perf.mark("getBlogPosts-end");
+    perf.measure("getBlogPosts-cached", "getBlogPosts-start", "getBlogPosts-end");
     return cached;
   }
-  
+
   // Load posts and update cache
   const postsDirectory = path.join(process.cwd(), "src", "app", "blog", "posts");
   const posts = getMDXData(postsDirectory);
-  
+
   blogCache.set(BLOG_CACHE_KEY, posts);
-  
-  perf.mark('getBlogPosts-end');
-  perf.measure('getBlogPosts-fresh', 'getBlogPosts-start', 'getBlogPosts-end');
-  
+
+  perf.mark("getBlogPosts-end");
+  perf.measure("getBlogPosts-fresh", "getBlogPosts-start", "getBlogPosts-end");
+
   return posts;
 }
 
