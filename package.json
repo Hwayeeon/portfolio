@@ -10,7 +10,12 @@
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "type-check": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.{ts,tsx,md,mdx}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,md,mdx}\""
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,md,mdx}\"",
+    "lighthouse": "lhci collect && lhci assert",
+    "lighthouse:desktop": "lighthouse http://localhost:3000 --preset=desktop --output=html --output-path=./lighthouse-desktop.html",
+    "lighthouse:mobile": "lighthouse http://localhost:3000 --preset=mobile --output=html --output-path=./lighthouse-mobile.html",
+    "analyze": "ANALYZE=true npm run build",
+    "bundle-analyzer": "npx @next/bundle-analyzer"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
@@ -31,12 +36,15 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@lhci/cli": "^0.15.1",
+    "@next/bundle-analyzer": "^15.5.4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "^15.5.4",
+    "lighthouse": "^12.8.2",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.9",
     "tailwindcss": "^4",
