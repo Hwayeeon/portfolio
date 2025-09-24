@@ -4,10 +4,13 @@ import dynamic from "next/dynamic";
 import { PostCardSkeleton } from "@/components/loading";
 
 // Lazy load the LatestPosts component since it's below the fold
-const LatestPosts = dynamic(() => import("@/components/latest-posts").then(mod => ({ default: mod.LatestPosts })), {
-  ssr: true, // Still render on server for SEO
-  loading: () => <PostCardSkeleton count={3} />
-});
+const LatestPosts = dynamic(
+  () => import("@/components/latest-posts").then((mod) => ({ default: mod.LatestPosts })),
+  {
+    ssr: true, // Still render on server for SEO
+    loading: () => <PostCardSkeleton count={3} />,
+  }
+);
 
 export default function HomePage() {
   return (
